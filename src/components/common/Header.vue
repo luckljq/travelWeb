@@ -1,98 +1,82 @@
 <template>
-    <div class="header">
-        <!-- 折叠按钮 -->
-        <div class="collapse-btn" @click="collapseChage">
-            <i class="el-icon-menu"></i>
+    <div>
+        <div class="header">
+            <el-row>
+                <el-col :span="6">
+                    <div class="logo">
+                        旅行信息分享平台
+                    </div>
+                </el-col>
+                <el-col :span="12">
+                    <el-menu class="el-menu-demo"
+                             :default-active="activeIndex"
+                             mode="horizontal"
+                             text-color="#222222"
+                             active-text-color="#F7C709"
+                             @select="handleSelect" router>
+                        <el-menu-item index="dashboard" style="font-size: 18px">目的地</el-menu-item>
+                        <el-menu-item index="2" style="font-size: 18px">目的地</el-menu-item>
+                        <el-menu-item index="3" style="font-size: 18px">目的地</el-menu-item>
+                        <el-menu-item index="4" style="font-size: 18px">目的地</el-menu-item>
+                        <el-menu-item index="5" style="font-size: 18px">目的地</el-menu-item>
+                        <el-menu-item index="6" style="font-size: 18px"><a href="https://www.ele.me" target="_blank">订单管理</a></el-menu-item>
+                    </el-menu>
+                </el-col>
+                <el-col :span="6">
+                    <div class="header-user-con">
+                        <!-- 用户头像 -->
+                        <div class="user-avator"><img src="../../assets/img/img.jpg"></div>
+                        <!-- 用户名下拉菜单 -->
+                        <el-dropdown class="user-name" trigger="click" @command="handleCommand">
+                        <span class="el-dropdown-link">
+                            {{username}} <i class="el-icon-caret-bottom"></i>
+                        </span>
+                            <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
+                    </div>
+                </el-col>
+            </el-row>
         </div>
-        <div class="logo">景区信息后台管理系统</div>
-        <div class="header-right">
-            <div class="header-user-con">
-                <!-- 全屏显示 -->
-                <div class="btn-fullscreen" @click="handleFullScreen">
-                    <el-tooltip effect="dark" :content="fullscreen?`取消全屏`:`全屏`" placement="bottom">
-                        <i class="el-icon-rank"></i>
-                    </el-tooltip>
-                </div>
-                <!-- 用户头像 -->
-                <div class="user-avator"><img src="../../assets/img/img.jpg"></div>
-                <!-- 用户名下拉菜单 -->
-                <el-dropdown class="user-name" trigger="click" @command="handleCommand">
-                    <span class="el-dropdown-link">
-                        {{username}} <i class="el-icon-caret-bottom"></i>
-                    </span>
-                    <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item divided  command="loginout">退出登录</el-dropdown-item>
-                    </el-dropdown-menu>
-                </el-dropdown>
-            </div>
-        </div>
+
     </div>
 </template>
 <script>
     import bus from '../common/bus';
+
     export default {
         data() {
             return {
-                collapse: false,
-                fullscreen: false,
+                activeIndex: 'dashboard',
                 name: this.$store.getters.getUser.name,
-                message: 2
             }
         },
-        computed:{
-            username(){
+        computed: {
+            username() {
                 return this.$store.getters.getUser.username;
             }
         },
-        methods:{
+        methods: {
             // 用户名下拉菜单选择事件
             handleCommand(command) {
-                if(command === 'loginout'){
+                if (command === 'loginout') {
                     sessionStorage.clear();
                     this.$router.push('/login');
                 }
             },
-            // 侧边栏折叠
-            collapseChage(){
-                this.collapse = !this.collapse;
-                bus.$emit('collapse', this.collapse);
-            },
-            // 全屏事件
-            handleFullScreen(){
-                let element = document.documentElement;
-                if (this.fullscreen) {
-                    if (document.exitFullscreen) {
-                        document.exitFullscreen();
-                    } else if (document.webkitCancelFullScreen) {
-                        document.webkitCancelFullScreen();
-                    } else if (document.mozCancelFullScreen) {
-                        document.mozCancelFullScreen();
-                    } else if (document.msExitFullscreen) {
-                        document.msExitFullscreen();
-                    }
-                } else {
-                    if (element.requestFullscreen) {
-                        element.requestFullscreen();
-                    } else if (element.webkitRequestFullScreen) {
-                        element.webkitRequestFullScreen();
-                    } else if (element.mozRequestFullScreen) {
-                        element.mozRequestFullScreen();
-                    } else if (element.msRequestFullscreen) {
-                        // IE11
-                        element.msRequestFullscreen();
-                    }
-                }
-                this.fullscreen = !this.fullscreen;
+            handleSelect(key, keyPath) {
+                console.log(key, keyPath);
             }
         },
-        mounted(){
-            if(document.body.clientWidth < 1500){
-                this.collapseChage();
-            }
+        mounted() {
         }
     }
 </script>
 <style scoped>
+    .el-menu-demo {
+        padding-top: 3px;
+    }
     .header {
         position: relative;
         box-sizing: border-box;
@@ -100,70 +84,48 @@
         height: 70px;
         font-size: 22px;
         color: #fff;
+
     }
-    .collapse-btn{
-        float: left;
-        padding: 0 21px;
-        cursor: pointer;
+
+    .header .logo {
+        color: #222222;
+        float: right;
+        padding-right: 50px;
         line-height: 70px;
     }
-    .header .logo{
-        float: left;
-        width:250px;
-        line-height: 70px;
-    }
-    .header-right{
+
+    .header-right {
         float: right;
         padding-right: 50px;
     }
-    .header-user-con{
+
+    .header-user-con {
         display: flex;
         height: 70px;
         align-items: center;
     }
-    .btn-fullscreen{
-        transform: rotate(45deg);
-        margin-right: 5px;
-        font-size: 24px;
-    }
-    .btn-bell, .btn-fullscreen{
-        position: relative;
-        width: 30px;
-        height: 30px;
-        text-align: center;
-        border-radius: 15px;
-        cursor: pointer;
-    }
-    .btn-bell-badge{
-        position: absolute;
-        right: 0;
-        top: -2px;
-        width: 8px;
-        height: 8px;
-        border-radius: 4px;
-        background: #f56c6c;
+
+    .btn-bell .el-icon-bell {
         color: #fff;
     }
-    .btn-bell .el-icon-bell{
-        color: #fff;
-    }
-    .user-name{
+
+    .user-name {
         margin-left: 10px;
     }
-    .user-avator{
+
+    .user-avator {
         margin-left: 20px;
     }
-    .user-avator img{
+
+    .user-avator img {
         display: block;
-        width:40px;
-        height:40px;
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
     }
-    .el-dropdown-link{
-        color: #fff;
+
+    .el-dropdown-link {
+        color: black;
         cursor: pointer;
-    }
-    .el-dropdown-menu__item{
-        text-align: center;
     }
 </style>
