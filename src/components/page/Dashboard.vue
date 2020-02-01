@@ -1,7 +1,6 @@
 <template>
     <div>
-        <div class="header-box">
-        </div>
+
         <div class="container">
             <el-row :gutter="20">
                 <el-col :span="8">
@@ -235,12 +234,6 @@
 
 
 <style scoped>
-    .header-box {
-        background: url("../../assets/img/header.jpg") no-repeat;
-        background-size: 100% 100%;
-        width: 100%;
-        height: 500px;
-    }
     .el-row {
         margin-bottom: 20px;
     }

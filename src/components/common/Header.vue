@@ -9,16 +9,16 @@
                 </el-col>
                 <el-col :span="12">
                     <el-menu class="el-menu-demo"
-                             :default-active="activeIndex"
+                             :default-active="onRoutes"
                              mode="horizontal"
                              text-color="#222222"
                              active-text-color="#F7C709"
                              @select="handleSelect" router>
-                        <el-menu-item index="dashboard" style="font-size: 18px">目的地</el-menu-item>
-                        <el-menu-item index="2" style="font-size: 18px">目的地</el-menu-item>
-                        <el-menu-item index="3" style="font-size: 18px">目的地</el-menu-item>
-                        <el-menu-item index="4" style="font-size: 18px">目的地</el-menu-item>
-                        <el-menu-item index="5" style="font-size: 18px">目的地</el-menu-item>
+                        <el-menu-item index="dashboard" style="font-size: 18px">首页</el-menu-item>
+                        <el-menu-item index="destination" style="font-size: 18px">目的地</el-menu-item>
+                        <el-menu-item index="rankingList" style="font-size: 18px">排行榜</el-menu-item>
+                        <el-menu-item index="diary" style="font-size: 18px">旅行日记</el-menu-item>
+                        <el-menu-item index="questions" style="font-size: 18px">问答</el-menu-item>
                         <el-menu-item index="6" style="font-size: 18px"><a href="https://www.ele.me" target="_blank">订单管理</a></el-menu-item>
                     </el-menu>
                 </el-col>
@@ -55,6 +55,9 @@
         computed: {
             username() {
                 return this.$store.getters.getUser.username;
+            },
+            onRoutes(){
+                return this.$route.path.replace('/','');
             }
         },
         methods: {

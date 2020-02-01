@@ -21,6 +21,26 @@ export default new Router({
                     meta: { title: '系统首页' }
                 },
                 {
+                    path: '/destination',
+                    component: resolve => require(['../components/page/Destination.vue'], resolve),
+                    meta: { title: '目的地' }
+                },
+                {
+                    path: '/rankingList',
+                    component: resolve => require(['../components/page/RankingList.vue'], resolve),
+                    meta: { title: '排行榜' }
+                },
+                {
+                    path: '/diary',
+                    component: resolve => require(['../components/page/Diary.vue'], resolve),
+                    meta: { title: '旅行日记' }
+                },
+                {
+                    path: '/questions',
+                    component: resolve => require(['../components/page/Questions.vue'], resolve),
+                    meta: { title: '问答' }
+                },
+                {
                     path: '/404',
                     component: resolve => require(['../components/page/404.vue'], resolve),
                     meta: { title: '404' }
