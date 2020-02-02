@@ -9,10 +9,11 @@
                 </el-col>
                 <el-col :span="12">
                     <el-menu class="el-menu-demo"
+                             background-color="#3C3C3C"
                              :default-active="onRoutes"
                              mode="horizontal"
-                             text-color="#222222"
-                             active-text-color="#F7C709"
+                             text-color="#EEEEEE"
+                             active-text-color="#EEBE00"
                              @select="handleSelect" router>
                         <el-menu-item index="dashboard" style="font-size: 18px">首页</el-menu-item>
                         <el-menu-item index="destination" style="font-size: 18px">目的地</el-menu-item>
@@ -79,6 +80,7 @@
 <style scoped>
     .el-menu-demo {
         padding-top: 3px;
+        border: white;
     }
     .header {
         position: relative;
@@ -86,12 +88,10 @@
         width: 100%;
         height: 70px;
         font-size: 22px;
-        color: #fff;
-
     }
 
     .header .logo {
-        color: #222222;
+        color: #EEBE00;
         float: right;
         padding-right: 50px;
         line-height: 70px;
@@ -103,6 +103,8 @@
     }
 
     .header-user-con {
+        float: right;
+        padding-right: 50px;
         display: flex;
         height: 70px;
         align-items: center;
@@ -128,7 +130,7 @@
     }
 
     .el-dropdown-link {
-        color: black;
+        color: white;
         cursor: pointer;
     }
 </style>

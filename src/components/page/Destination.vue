@@ -18,7 +18,7 @@
                             <el-row>
                                 <el-col :span="5" class="center-title"><a>直辖市</a></el-col>
                                 <el-col :span="3"><a href="https://www.baidu.com" target="_blank">北京</a></el-col>
-                                <el-col :span="3"><a>上海</a></el-col>
+                                <el-col :span="3"><a href="http://localhost:8088/search" target="_blank">上海</a></el-col>
                                 <el-col :span="3"><a>重庆</a></el-col>
                                 <el-col :span="3"><a>天京</a></el-col>
                             </el-row>
@@ -98,10 +98,12 @@
         },
         methods:{
             toSearch() {
-                this.$router.push({
-                    path:'/search?q=' + this.name,
+                if(this.name != '') {
+                    this.$router.push({
+                        path: '/search?q=' + this.name,
 
-                });
+                    });
+                }
             }
         }
     }
@@ -134,7 +136,7 @@
         background: url("../../assets/img/header.jpg") no-repeat;
         background-size: 100% 100%;
         width: 100%;
-        height: 600px;
+        height: 700px;
     }
     .ms-title{
         width:100%;
