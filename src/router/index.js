@@ -41,6 +41,11 @@ export default new Router({
                     meta: { title: '问答' }
                 },
                 {
+                    path: '/search',
+                    component: resolve => require(['../components/page/Search.vue'], resolve),
+                    meta: { title: '搜索' }
+                },
+                {
                     path: '/404',
                     component: resolve => require(['../components/page/404.vue'], resolve),
                     meta: { title: '404' }
