@@ -101,7 +101,6 @@
                 if(this.name != '') {
                     this.$router.push({
                         path: '/search?q=' + this.name,
-
                     });
                 }
             }

@@ -11,13 +11,13 @@ const service = axios.create({
 
 service.interceptors.request.use( config => {
     let url = config.url;
-    if(url.indexOf("login") === -1){
-        let user = JSON.parse(window.sessionStorage.getItem('UserState'));
-        if (user) {
-            token = user.user.token;
-        }
-        config.headers["Authorization"] ="Bearer " + token ;
-    }
+    // if(url.indexOf("login") === -1){
+    //     let user = JSON.parse(window.sessionStorage.getItem('UserState'));
+    //     if (user) {
+    //         token = user.user.token;
+    //     }
+    //     config.headers["Authorization"] ="Bearer " + token ;
+    // }
     return config;
 }, error => {
     Message.error({
