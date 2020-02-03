@@ -9,7 +9,7 @@
                 <h3>相关地点</h3>
             </div>
             <div class="search-image" v-for="(item,i) in list" :style="{backgroundImage:'url('+ item.imageUrl +')'}">
-                <a v-bind="{href: 'https://www.baidu.com/'}" target="_blank">
+                <a v-bind="{href: 'http://localhost:8088/spot?s=' + item.scenicSpotId}" target="_blank">
                     <div class="search-title">
                         <div class="info-title">{{item.scenicSpotName}}</div>
                     </div>
