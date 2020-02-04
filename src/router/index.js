@@ -46,6 +46,11 @@ export default new Router({
                     meta: { title: '搜索' }
                 },
                 {
+                    path: '/spot',
+                    component: resolve => require(['../components/page/Spot.vue'], resolve),
+                    meta: { title: '景点' }
+                },
+                {
                     path: '/404',
                     component: resolve => require(['../components/page/404.vue'], resolve),
                     meta: { title: '404' }
