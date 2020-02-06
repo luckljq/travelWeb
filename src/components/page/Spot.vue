@@ -122,7 +122,6 @@
             getCount() {
                 getSpotCount(this.id).then(res => {
                     this.s = res.data;
-                    console.log(this.s)
                 })
             },
             zan() {
