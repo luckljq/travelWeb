@@ -4,13 +4,19 @@
             <div class="header2">
                 <div class="header2-title">{{spot.scenicSpotName}}</div>
                 <div class="header2-right">
-                    <el-button icon="el-icon-thumb" size="medium " circle>赞</el-button>
+                    <el-row style="text-align: center">
+                    <el-button icon="el-icon-thumb" size="medium" :type="this.type" circle @click="zan">{{ss}}</el-button>
+                    </el-row>
+                    <el-row style="text-align: center">
+                    <div class="span" >{{s}}</div>
+                    </el-row>
                 </div>
+
             </div>
             <div class="center-info">
                 <div class="center-left">概况</div>
                 <div class="center-right">
-                    <el-button type="warning" size="medium " @click="test">我要点评</el-button>
+                    <el-button type="warning" size="medium" >我要点评</el-button>
                 </div>
                 <div class="center-mid">{{spot.description}}</div>
 
@@ -84,13 +90,16 @@
     </div>
 </template>
 <script>
-    import {getSpotDetail, spotUserFabulous} from '../../api/spot'
+    import {getSpotDetail, spotUserFabulous, getSpotCount, getSpotUserStatus} from '../../api/spot'
     export default {
         name: 'spot',
         data() {
             return {
                 id:'',
                 spot:{},
+                s:null,
+                ss:'赞',
+                type:'',
             }
         },
         created() {
@@ -98,21 +107,56 @@
             getSpotDetail(this.id).then(res => {
                 this.spot = res.data
             });
-
+            this.getCount();
+            getSpotUserStatus({
+                spotId: this.id,
+                userId: 1
+            }).then(res => {
+                if (res.data == 1) {
+                    this.ss = "取消";
+                    this.type = "danger"
+                }
+            })
         },
         methods:{
-            test(){
-                spotUserFabulous({
-                    spotId:1,
-                    userId:3
-                }).then(res => {
-                    console.log(res);
+            getCount() {
+                getSpotCount(this.id).then(res => {
+                    this.s = res.data;
+                    console.log(this.s)
                 })
+            },
+            zan() {
+                if (this.type == ''){
+                    spotUserFabulous({
+                        spotId: this.id,
+                        userId: 1,
+                        value: 1
+                    });
+                    this.s = this.s + 1;
+                    this.ss = "取消";
+                    this.type = "danger"
+                } else {
+                    spotUserFabulous({
+                        spotId: this.id,
+                        userId: 1,
+                        value: 0
+                    });
+                    this.s = this.s-1;
+                    this.ss = "赞";
+                    this.type = ""
+                }
+
             }
         }
     }
 </script>
 <style scoped>
+    .span {
+        color: #FF9D52;
+        position: relative;
+        font-size: 20px;
+        padding-top: 8px;
+    }
     .info-content {
         color: #66667F;
         padding-top: 10px;
@@ -126,7 +170,7 @@
     }
     .header2-right {
         float: right;
-        margin-right: 25px;
+
     }
     .center {
 

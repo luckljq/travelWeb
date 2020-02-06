@@ -8,12 +8,19 @@
             <div class="search">
                 <h3>相关地点</h3>
             </div>
-            <div class="search-image" v-for="(item,i) in list" :style="{backgroundImage:'url('+ item.imageUrl +')'}">
-                <a v-bind="{href: 'http://localhost:8088/spot?s=' + item.scenicSpotId}" target="_blank">
-                    <div class="search-title">
-                        <div class="info-title">{{item.scenicSpotName}}</div>
-                    </div>
-                </a>
+            <div v-if="this.list.length > 0">
+                <div class="search-image" v-for="(item,i) in list" :style="{backgroundImage:'url('+ item.imageUrl +')'}">
+                    <a v-bind="{href: 'http://localhost:8088/spot?s=' + item.scenicSpotId}" target="_blank">
+                        <div class="search-title">
+                            <div class="info-title">{{item.scenicSpotName}}</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div v-else>
+                <div class="center">
+                    未搜索到结果
+                </div>
             </div>
         </div>
     </div>
@@ -44,13 +51,20 @@
                 searchSpot({
                     name: this.name
                 }).then(res => {
-                    this.list = res.data
+                    this.list = res.data;
+                    console.log(this.list)
                 });
             }
         }
     }
 </script>
 <style scoped>
+    .center {
+        height: 425px;
+        padding-top: 50px;
+        font-size: 50px;
+        text-align: center;
+    }
     .info-title {
         padding-top: 30px;
         font-size: 50px;
