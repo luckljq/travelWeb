@@ -77,7 +77,40 @@
                                 width="350"
                                 trigger="click">
                         <el-button slot="reference" size="medium" type="text" style="color:#EEBE00;">注册</el-button>
-                            注册
+                            <div class="ms-login">
+                                <div class="ms-title">用户注册</div>
+                                <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-width="0px" class="ms-content">
+                                    <el-form-item prop="username">
+                                        <el-input v-model="ruleForm2.username" placeholder="请输入您的电话" size="large">
+                                            <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
+                                        </el-input>
+                                    </el-form-item>
+                                    <el-form-item>
+                                        <el-button icon="el-icon-mobile-phone" @click="send" style="width: 100%" type="success" :disabled="disabled=!show" >
+                                            <span v-show="show">获取验证码</span>
+                                            <span v-show="!show" class="count">{{count}} s 后可重新发送</span>
+                                        </el-button>
+                                    </el-form-item>
+                                    <el-form-item prop="code">
+                                        <el-input v-model="ruleForm2.code" placeholder="请输入验证码" size="large">
+                                            <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
+                                        </el-input>
+                                    </el-form-item>
+                                    <el-form-item prop="password">
+                                        <el-input type="password" size="large" placeholder="登录密码" v-model="ruleForm2.password" @keyup.enter.native="submitForm('ruleForm')">
+                                            <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
+                                        </el-input>
+                                    </el-form-item>
+                                    <el-form-item prop="password2">
+                                        <el-input type="password" size="large" placeholder="再次输入密码" v-model="ruleForm2.password2" @keyup.enter.native="submitForm('ruleForm')">
+                                            <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
+                                        </el-input>
+                                    </el-form-item>
+                                    <div class="login-btn">
+                                        <el-button type="warning" size="medium" @click="submitForm2('ruleForm2')" style="font-size: 20px">注册</el-button>
+                                    </div>
+                                </el-form>
+                            </div>
                         </el-popover>
                     </div>
                 </el-col>
@@ -94,13 +127,32 @@
     </div>
 </template>
 <script>
+    import {Message} from 'element-ui'
     import {login} from '../../api/login'
+    const TIME_COUNT = 60;
     export default {
         data() {
+            //两次密码验证
+            let validatePass = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请再次输入密码'));
+                } else if (value !== this.ruleForm2.password) {
+                    callback(new Error('两次输入密码不一致!'));
+                } else {
+                    callback();
+                }
+            };
             return {
+                //验证码
+                timer:null,
+                count:'',
+                show:true,
+                code:'',
+                //显示隐藏
                 loginVisible:false,
                 register:false,
                 resetVisible:false,
+                //是否登录
                 isLogin: false,
                 activeIndex: 'dashboard',
                 name: this.$store.getters.getUser.name,
@@ -116,6 +168,27 @@
                     password: [
                         { required: true, message: '请输入密码', trigger: 'blur' }
                     ]
+                },
+                ruleForm2: {
+                    username: '',
+                    password: '',
+                    password2: '',
+                    code:''
+                },
+                rules2: {
+                    username: [
+                        { required: true, message: '请输入电话号码', trigger: 'blur'}
+                    ],
+                    code: [
+                        { required: true, message: '请输入验证码', trigger: 'blur' }
+                    ],
+                    password: [
+                        { required: true, message: '请输入密码', trigger: 'blur' }
+                    ]
+                    ,
+                    password2: [
+                        {validator: validatePass, trigger: 'blur' }
+                    ]
                 }
             }
         },
@@ -128,6 +201,41 @@
             }
         },
         methods: {
+            //发送验证码
+            send() {
+                if (this.ruleForm2.username == "") {
+                    Message.warning({
+                        message: "请您先输入电话号码",
+                    });
+                } else {
+                    if (!this.timer) {
+                        this.count = TIME_COUNT;
+                        this.show = false;
+                        this.timer = setInterval(() => {
+                            if (this.count > 0 && this.count <= TIME_COUNT) {
+                                this.count--;
+                            } else {
+                                this.show = true;
+                                // 清除定时器
+                                clearInterval(this.timer);
+                                this.timer = null;
+                            }
+                        }, 1000)
+                    }
+                }
+            },
+            //注册按钮
+            submitForm2(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        console.log("注册")
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                })
+            },
+            //登录按钮
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
@@ -139,6 +247,7 @@
                 });
 
             },
+            //登录
             login(formName) {
                 login({
                     username: this.ruleForm.username,
@@ -157,11 +266,13 @@
                             token:this.items.token
                         });
                         sessionStorage.setItem('UserState', JSON.stringify(this.$store.state.user));
+                        window.location.reload();
                         this.loginVisible = true;
                         this.isLogin = true;
                     }
                 })
             },
+            //打开重置密码
             openReset() {
                 this.resetVisible = true;
                 this.loginVisible = false;
@@ -170,7 +281,8 @@
             handleCommand(command) {
                 if (command === 'loginout') {
                     sessionStorage.clear();
-                    this.isLogin = false;
+                    // this.isLogin = false;
+                    window.location.reload()
                 }
             },
             handleSelect(key, keyPath) {
