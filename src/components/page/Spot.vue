@@ -90,6 +90,7 @@
     </div>
 </template>
 <script>
+    import {Message} from 'element-ui'
     import {getSpotDetail, spotUserFabulous, getSpotCount, getSpotUserStatus} from '../../api/spot'
     export default {
         name: 'spot',
@@ -108,15 +109,18 @@
                 this.spot = res.data
             });
             this.getCount();
-            getSpotUserStatus({
-                spotId: this.id,
-                userId: 1
-            }).then(res => {
-                if (res.data == 1) {
-                    this.ss = "取消";
-                    this.type = "danger"
-                }
-            })
+            let id = this.$store.getters.getUser.id;
+            if (id != "") {
+                getSpotUserStatus({
+                    spotId: this.id,
+                    userId: id
+                }).then(res => {
+                    if (res.data == 1) {
+                        this.ss = "取消";
+                        this.type = "danger"
+                    }
+                })
+            }
         },
         methods:{
             getCount() {
@@ -125,26 +129,32 @@
                 })
             },
             zan() {
-                if (this.type == ''){
-                    spotUserFabulous({
-                        spotId: this.id,
-                        userId: 1,
-                        value: 1
-                    });
-                    this.s = this.s + 1;
-                    this.ss = "取消";
-                    this.type = "danger"
+                if(this.$store.getters.getUser.token != "" && this.$store.getters.getUser.token != null){
+                    let id = this.$store.getters.getUser.id;
+                    if (this.type == ''){
+                        spotUserFabulous({
+                            spotId: this.id,
+                            userId: id,
+                            value: 1
+                        });
+                        this.s = this.s + 1;
+                        this.ss = "取消";
+                        this.type = "danger"
+                    } else {
+                        spotUserFabulous({
+                            spotId: this.id,
+                            userId: id,
+                            value: 0
+                        });
+                        this.s = this.s-1;
+                        this.ss = "赞";
+                        this.type = ""
+                    }
                 } else {
-                    spotUserFabulous({
-                        spotId: this.id,
-                        userId: 1,
-                        value: 0
+                    Message.warning({
+                        message: "请您先登录，再进行操作",
                     });
-                    this.s = this.s-1;
-                    this.ss = "赞";
-                    this.type = ""
                 }
-
             }
         }
     }

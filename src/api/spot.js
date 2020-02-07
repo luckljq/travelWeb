@@ -11,7 +11,7 @@ export const getSpotUserStatus = (query) => {
 //获取景点被点赞数
 export  const getSpotCount = (id) => {
     return request({
-        url:'/spot/user/count/' + id,
+        url:'/spot/spot/count/' + id,
         method: 'get'
     })
 };

@@ -94,6 +94,7 @@
     </div>
 </template>
 <script>
+    import {login} from '../../api/login'
     export default {
         data() {
             return {
@@ -139,7 +140,27 @@
 
             },
             login(formName) {
-
+                login({
+                    username: this.ruleForm.username,
+                    password: this.ruleForm.password,
+                    type:2
+                }).then(res => {
+                    if (res.data !== null) {
+                        //赋值登录状态
+                        this.items = res.data;
+                        sessionStorage.setItem('state','已登陆');
+                        sessionStorage.setItem('token',this.items.token);
+                        sessionStorage.setItem('privileges',JSON.stringify(this.items.user.privileges));
+                        this.$store.dispatch('asyncUpdateUser', {
+                            id:this.items.user.userId,
+                            username:this.items.user.userName,
+                            token:this.items.token
+                        });
+                        sessionStorage.setItem('UserState', JSON.stringify(this.$store.state.user));
+                        this.loginVisible = true;
+                        this.isLogin = true;
+                    }
+                })
             },
             openReset() {
                 this.resetVisible = true;
@@ -149,7 +170,7 @@
             handleCommand(command) {
                 if (command === 'loginout') {
                     sessionStorage.clear();
-                    this.$router.push('/login');
+                    this.isLogin = false;
                 }
             },
             handleSelect(key, keyPath) {
@@ -200,14 +221,14 @@
         height: 400px;
     }
     .el-menu-demo {
-        padding-top: 6px;
-        border: white;
+        padding-top: 4px;
+        border-bottom: 0 !important;
     }
     .header {
         position: relative;
         box-sizing: border-box;
         width: 100%;
-        height: 66px;
+        height: 70px;
         font-size: 22px;
     }
 

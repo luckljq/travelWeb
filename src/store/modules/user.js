@@ -1,6 +1,7 @@
 const user = {
     state : sessionStorage.getItem('UserState') ? JSON.parse(sessionStorage.getItem('UserState')) : {
         user: {
+            id:'',
             username:'',
             token: ''
         }
