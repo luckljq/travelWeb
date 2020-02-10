@@ -1,5 +1,13 @@
 import request from '../utils/request';
 
+//重置密码
+export const reset = (query) =>{
+    return request ({
+        url: '/sys/reset',
+        method: 'post',
+        data: query
+    })
+};
 //注册
 export const register = (query) => {
     return request ({

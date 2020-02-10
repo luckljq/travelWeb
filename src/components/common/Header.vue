@@ -20,7 +20,8 @@
                         <el-menu-item index="rankingList" style="font-size: 18px">排行榜</el-menu-item>
                         <el-menu-item index="diary" style="font-size: 18px">旅行日记</el-menu-item>
                         <el-menu-item index="questions" style="font-size: 18px">问答</el-menu-item>
-                        <el-menu-item index="6" style="font-size: 18px"><a href="https://www.ele.me" target="_blank">订单管理</a></el-menu-item>
+                        <el-menu-item index="6" style="font-size: 18px"><a href="https://www.ele.me" target="_blank">订单管理</a>
+                        </el-menu-item>
                     </el-menu>
                 </el-col>
                 <el-col :span="6">
@@ -47,26 +48,33 @@
                                 trigger="click">
                             <div class="ms-login">
                                 <div class="ms-title">用户登录</div>
-                                <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="ms-content">
+                                <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px"
+                                         class="ms-content">
                                     <el-form-item prop="username">
                                         <el-input v-model="ruleForm.username" placeholder="请输入您的电话" size="large">
                                             <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
                                         </el-input>
                                     </el-form-item>
                                     <el-form-item prop="password">
-                                        <el-input type="password" size="large" placeholder="登录密码" v-model="ruleForm.password" @keyup.enter.native="submitForm('ruleForm')">
+                                        <el-input type="password" size="large" placeholder="登录密码"
+                                                  v-model="ruleForm.password"
+                                                  @keyup.enter.native="submitForm('ruleForm')">
                                             <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
                                         </el-input>
                                     </el-form-item>
                                     <el-button size="medium" type="text" style="color: #8c939d; float: right"
-                                               @click="openReset">忘记密码</el-button>
+                                               @click="openReset">忘记密码
+                                    </el-button>
                                     <div class="login-btn">
-                                        <el-button type="warning" size="medium" @click="submitForm('ruleForm')" style="font-size: 20px">登录</el-button>
+                                        <el-button type="warning" size="medium" @click="submitForm('ruleForm')"
+                                                   style="font-size: 20px" >登录
+                                        </el-button>
                                     </div>
                                 </el-form>
                             </div>
-                        <el-button slot="reference" size="medium" type="text" style="color:#EEBE00;"
-                                   >登录</el-button>
+                            <el-button slot="reference" size="medium" type="text" style="color:#EEBE00;"
+                            >登录
+                            </el-button>
                         </el-popover>
                         <el-divider direction="vertical"></el-divider>
                         <!-- 注册气泡-->
@@ -76,19 +84,21 @@
                                 placement="left"
                                 width="350"
                                 trigger="click">
-                        <el-button slot="reference" size="medium" type="text" style="color:#EEBE00;">注册</el-button>
+                            <el-button slot="reference" size="medium" type="text" style="color:#EEBE00;">注册</el-button>
                             <div class="ms-login">
                                 <div class="ms-title">用户注册</div>
-                                <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-width="0px" class="ms-content">
+                                <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-width="0px"
+                                         class="ms-content">
                                     <el-form-item prop="phone">
                                         <el-input v-model="ruleForm2.phone" placeholder="请输入您的电话" size="large">
                                             <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
                                         </el-input>
                                     </el-form-item>
-                                    <el-form-item>
-                                        <el-button icon="el-icon-mobile-phone" @click="send" style="width: 100%" type="success" :disabled="disabled=!show" >
-                                            <span v-show="show">获取验证码</span>
-                                            <span v-show="!show" class="count">{{count}} s 后可重新发送</span>
+                                    <el-form-item >
+                                        <el-button icon="el-icon-mobile-phone" @click="send" style="width: 100%"
+                                                   type="success" :disabled="disabled=!show">
+                                            <span v-show="show" class="word">获取验证码</span>
+                                            <span v-show="!show" class="word">{{count}} s 后可重新发送</span>
                                         </el-button>
                                     </el-form-item>
                                     <el-form-item prop="code">
@@ -97,17 +107,23 @@
                                         </el-input>
                                     </el-form-item>
                                     <el-form-item prop="password">
-                                        <el-input type="password" size="large" placeholder="登录密码" v-model="ruleForm2.password" @keyup.enter.native="submitForm('ruleForm')">
+                                        <el-input type="password" size="large" placeholder="登录密码"
+                                                  v-model="ruleForm2.password"
+                                                  @keyup.enter.native="submitForm('ruleForm')">
                                             <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
                                         </el-input>
                                     </el-form-item>
                                     <el-form-item prop="password2">
-                                        <el-input type="password" size="large" placeholder="再次输入密码" v-model="ruleForm2.password2" @keyup.enter.native="submitForm('ruleForm')">
+                                        <el-input type="password" size="large" placeholder="再次输入密码"
+                                                  v-model="ruleForm2.password2"
+                                                  @keyup.enter.native="submitForm('ruleForm')">
                                             <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
                                         </el-input>
                                     </el-form-item>
                                     <div class="login-btn">
-                                        <el-button type="warning" size="medium" @click="submitForm2('ruleForm2')" style="font-size: 20px">注册</el-button>
+                                        <el-button type="warning" size="medium" @click="submitForm2('ruleForm2')"
+                                                   style="font-size: 20px">注册
+                                        </el-button>
                                     </div>
                                 </el-form>
                             </div>
@@ -122,13 +138,52 @@
                 :lock-scroll="false"
                 :visible.sync="resetVisible"
                 width="30%">
-            重置密码
+            <div class="rs">
+                <div class="rs-title">找回密码</div>
+                <el-form :model="ruleForm3" :rules="rules3" ref="ruleForm3" label-width="0px" class="ms-content">
+                    <el-form-item prop="phone">
+                        <el-input v-model="ruleForm3.phone" placeholder="请输入您的电话" size="large">
+                            <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button icon="el-icon-mobile-phone" @click="send" style="width: 100%" type="success"
+                                   :disabled="disabled=!show2">
+                            <span v-show="show2" class="word">获取验证码</span>
+                            <span v-show="!show2" class="word">{{count}} s 后可重新发送</span>
+                        </el-button>
+                    </el-form-item>
+                    <el-form-item prop="code">
+                        <el-input v-model="ruleForm3.code" placeholder="请输入验证码" size="large">
+                            <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item prop="password">
+                        <el-input type="password" size="large" placeholder="输入新密码" v-model="ruleForm3.password"
+                                  @keyup.enter.native="submitForm('ruleForm')">
+                            <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item prop="password2">
+                        <el-input type="password" size="large" placeholder="确认密码" v-model="ruleForm3.password2"
+                                  @keyup.enter.native="submitForm('ruleForm')">
+                            <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
+                        </el-input>
+                    </el-form-item>
+                    <div class="login-btn">
+                        <el-button type="warning" size="medium" @click="submitForm3('ruleForm3')"
+                                   style="font-size: 20px">重置密码
+                        </el-button>
+                    </div>
+                </el-form>
+            </div>
         </el-dialog>
     </div>
 </template>
 <script>
     import {Message} from 'element-ui'
-    import {login, register, getCode} from '../../api/login'
+    import {login, register, getCode, reset} from '../../api/login'
+
     const TIME_COUNT = 60;
     export default {
         data() {
@@ -142,17 +197,27 @@
                     callback();
                 }
             };
+            let validatePass2 = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请再次输入密码'));
+                } else if (value !== this.ruleForm3.password) {
+                    callback(new Error('两次输入密码不一致!'));
+                } else {
+                    callback();
+                }
+            };
             return {
                 //验证码
-                timer:null,
-                count:'',
-                show:true,
-                key:'',
+                timer: null,
+                count: '',
+                show: true,
+                show2: true,
+                key: '',
                 phone: '',
                 //显示隐藏
-                loginVisible:false,
-                register:false,
-                resetVisible:false,
+                loginVisible: false,
+                register: false,
+                resetVisible: false,
                 //是否登录
                 isLogin: false,
                 activeIndex: 'dashboard',
@@ -164,31 +229,52 @@
                 },
                 rules: {
                     username: [
-                        { required: true, message: '请输入用户名', trigger: 'blur' }
+                        {required: true, message: '请输入用户名', trigger: 'blur'}
                     ],
                     password: [
-                        { required: true, message: '请输入密码', trigger: 'blur' }
+                        {required: true, message: '请输入密码', trigger: 'blur'}
                     ]
                 },
                 ruleForm2: {
                     phone: '',
                     password: '',
                     password2: '',
-                    code:''
+                    code: ''
                 },
                 rules2: {
                     phone: [
-                        { required: true, message: '请输入电话号码', trigger: 'blur'}
+                        {required: true, message: '请输入电话号码', trigger: 'blur'}
                     ],
                     code: [
-                        { required: true, message: '请输入验证码', trigger: 'blur' }
+                        {required: true, message: '请输入验证码', trigger: 'blur'}
                     ],
                     password: [
-                        { required: true, message: '请输入密码', trigger: 'blur' }
+                        {required: true, message: '请输入密码', trigger: 'blur'}
                     ]
                     ,
                     password2: [
-                        {validator: validatePass, trigger: 'blur' }
+                        {validator: validatePass, trigger: 'blur'}
+                    ]
+                },
+                ruleForm3: {
+                    phone: '',
+                    password: '',
+                    password2: '',
+                    code: ''
+                },
+                rules3: {
+                    phone: [
+                        {required: true, message: '请输入电话号码', trigger: 'blur'}
+                    ],
+                    code: [
+                        {required: true, message: '请输入验证码', trigger: 'blur'}
+                    ],
+                    password: [
+                        {required: true, message: '请输入新密码', trigger: 'blur'}
+                    ]
+                    ,
+                    password2: [
+                        {validator: validatePass2, trigger: 'blur'}
                     ]
                 }
             }
@@ -197,40 +283,73 @@
             username() {
                 return this.$store.getters.getUser.username;
             },
-            onRoutes(){
-                return this.$route.path.replace('/','');
+            onRoutes() {
+                return this.$route.path.replace('/', '');
             }
         },
         methods: {
             //发送验证码
             send() {
-                if (this.ruleForm2.phone == "") {
-                    Message.warning({
-                        message: "请您先输入电话号码",
-                    });
+                let phone = "";
+                if (this.resetVisible == true) {
+                    phone = this.ruleForm3.phone
                 } else {
-                    getCode(this.ruleForm2.phone).then(res => {
-                        Message.success({
-                            message: "发送验证码成功"
+                    phone = this.ruleForm2.phone
+                }
+                if (phone != "") {
+                    if (phone == "") {
+                        Message.warning({
+                            message: "请您先输入电话号码",
                         });
-                        this.key = res.data.key;
-                        this.phone = res.data.phone;
-                    });
-                    if (!this.timer) {
-                        this.count = TIME_COUNT;
-                        this.show = false;
-                        this.timer = setInterval(() => {
-                            if (this.count > 0 && this.count <= TIME_COUNT) {
-                                this.count--;
-                            } else {
-                                this.show = true;
-                                // 清除定时器
-                                clearInterval(this.timer);
-                                this.timer = null;
-                            }
-                        }, 1000)
+                    } else {
+                        getCode(phone).then(res => {
+                            Message.success({
+                                message: "发送验证码成功"
+                            });
+                            this.key = res.data.key;
+                            this.phone = res.data.phone;
+                        });
+                        if (!this.timer) {
+                            this.count = TIME_COUNT;
+                            this.show = false;
+                            this.show2 = false;
+                            this.timer = setInterval(() => {
+                                if (this.count > 0 && this.count <= TIME_COUNT) {
+                                    this.count--;
+                                } else {
+                                    this.show = true;
+                                    // 清除定时器
+                                    clearInterval(this.timer);
+                                    this.timer = null;
+                                }
+                            }, 1000)
+                        }
                     }
                 }
+            },
+            //找回密码按钮
+            submitForm3(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        if (this.phone == this.ruleForm3.phone) {
+                            reset({
+                                phone: this.ruleForm3.phone,
+                                password: this.ruleForm3.password,
+                                key: this.key,
+                                code: this.ruleForm3.code,
+                            }).then(res => {
+                                Message.success({
+                                    message:res.message
+                                });
+                                this.resetVisible = false;
+                                this.ruleForm3 = {};
+                            })
+                        }
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                })
             },
             //注册按钮
             submitForm2(formName) {
@@ -268,13 +387,13 @@
             },
             //赋值登录状态
             loginStatus() {
-                sessionStorage.setItem('state','已登陆');
-                sessionStorage.setItem('token',this.items.token);
-                sessionStorage.setItem('privileges',JSON.stringify(this.items.user.privileges));
+                sessionStorage.setItem('state', '已登陆');
+                sessionStorage.setItem('token', this.items.token);
+                sessionStorage.setItem('privileges', JSON.stringify(this.items.user.privileges));
                 this.$store.dispatch('asyncUpdateUser', {
-                    id:this.items.user.userId,
-                    username:this.items.user.userName,
-                    token:this.items.token
+                    id: this.items.user.userId,
+                    username: this.items.user.userName,
+                    token: this.items.token
                 });
                 sessionStorage.setItem('UserState', JSON.stringify(this.$store.state.user));
                 window.location.reload();
@@ -286,7 +405,7 @@
                 login({
                     username: this.ruleForm.username,
                     password: this.ruleForm.password,
-                    type:2
+                    type: 2
                 }).then(res => {
                     if (res.data !== null) {
                         //赋值登录状态
@@ -313,7 +432,7 @@
             }
         },
         created() {
-            if(this.$store.getters.getUser.token != "" && this.$store.getters.getUser.token != null) {
+            if (this.$store.getters.getUser.token != "" && this.$store.getters.getUser.token != null) {
                 this.isLogin = true;
             }
         },
@@ -321,44 +440,72 @@
         }
     }
 </script>
-<style >
-    .b{
-        background-color: #fafafa;
+<style>
+    .word {
+        letter-spacing: 1em;
+        text-align: center;
     }
-    .ms-title{
-        width:100%;
+
+    .rs {
+        background-color: #fafafa;
+        margin-left: 13%;
+        width: 300px;
+    }
+
+    .rs-title {
+        letter-spacing: 1em;
+        width: 100%;
         line-height: 50px;
         text-align: center;
-        font-size:20px;
+        font-size: 20px;
         border-bottom: 1px solid #ddd;
     }
-    .ms-login{
+
+    .b {
+        background-color: #fafafa;
+    }
+
+    .ms-title {
+        width: 100%;
+        line-height: 50px;
+        text-align: center;
+        font-size: 20px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .ms-login {
+        letter-spacing: 1em;
         background-color: #fafafa;
         margin-left: 7%;
-        width:300px;
+        width: 300px;
     }
-    .ms-content{
+
+    .ms-content {
         padding-top: 30px;
     }
-    .login-btn{
+
+    .login-btn {
         margin-top: 50px;
         text-align: center;
 
     }
-    .login-btn button{
-        width:100%;
-        height:36px;
+
+    .login-btn button {
+        width: 100%;
+        height: 36px;
         margin-bottom: 10px;
     }
-    .a{
+
+    .a {
         background-color: #fafafa;
         width: 450px !important;
-        height: 400px;
     }
+
     .el-menu-demo {
         padding-top: 4px;
         border-bottom: 0 !important;
     }
+
     .header {
         position: relative;
         box-sizing: border-box;
