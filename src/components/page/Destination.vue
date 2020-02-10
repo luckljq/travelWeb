@@ -1,9 +1,9 @@
 <template>
     <div>
         <div class="header-box">
-            <div class="ms-login">
-                <div class="ms">
-                <div class="ms-title">你想去哪里？</div>
+            <div class="ma-login">
+                <div class="ma">
+                <div class="ma-title">你想去哪里？</div>
                     <el-input v-model="name" placeholder="我想去..." size="medium" class="handle-input"/>
                     <el-button icon="el-icon-search" circle size="medium" type="warning" @click="toSearch"></el-button>
                 </div>
@@ -137,13 +137,14 @@
         width: 100%;
         height: 700px;
     }
-    .ms-title{
+    .ma-title{
+        text-align: left;
         width:100%;
         line-height: 50px;
         font-size:20px;
         color: #fff;
     }
-    .ms-login{
+    .ma-login{
         position: absolute;
         left:50%;
         top:50%;
@@ -158,7 +159,7 @@
         height:36px;
         margin-bottom: 10px;
     }
-    .ms{
+    .ma{
         padding: 10px;
     }
 </style>

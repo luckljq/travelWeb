@@ -80,8 +80,8 @@
                             <div class="ms-login">
                                 <div class="ms-title">用户注册</div>
                                 <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-width="0px" class="ms-content">
-                                    <el-form-item prop="username">
-                                        <el-input v-model="ruleForm2.username" placeholder="请输入您的电话" size="large">
+                                    <el-form-item prop="phone">
+                                        <el-input v-model="ruleForm2.phone" placeholder="请输入您的电话" size="large">
                                             <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
                                         </el-input>
                                     </el-form-item>
@@ -128,7 +128,7 @@
 </template>
 <script>
     import {Message} from 'element-ui'
-    import {login} from '../../api/login'
+    import {login, register, getCode} from '../../api/login'
     const TIME_COUNT = 60;
     export default {
         data() {
@@ -147,7 +147,8 @@
                 timer:null,
                 count:'',
                 show:true,
-                code:'',
+                key:'',
+                phone: '',
                 //显示隐藏
                 loginVisible:false,
                 register:false,
@@ -170,13 +171,13 @@
                     ]
                 },
                 ruleForm2: {
-                    username: '',
+                    phone: '',
                     password: '',
                     password2: '',
                     code:''
                 },
                 rules2: {
-                    username: [
+                    phone: [
                         { required: true, message: '请输入电话号码', trigger: 'blur'}
                     ],
                     code: [
@@ -203,11 +204,18 @@
         methods: {
             //发送验证码
             send() {
-                if (this.ruleForm2.username == "") {
+                if (this.ruleForm2.phone == "") {
                     Message.warning({
                         message: "请您先输入电话号码",
                     });
                 } else {
+                    getCode(this.ruleForm2.phone).then(res => {
+                        Message.success({
+                            message: "发送验证码成功"
+                        });
+                        this.key = res.data.key;
+                        this.phone = res.data.phone;
+                    });
                     if (!this.timer) {
                         this.count = TIME_COUNT;
                         this.show = false;
@@ -228,7 +236,18 @@
             submitForm2(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        console.log("注册")
+                        if (this.phone == this.ruleForm2.phone) {
+                            register({
+                                phone: this.ruleForm2.phone,
+                                password: this.ruleForm2.password,
+                                key: this.key,
+                                code: this.ruleForm2.code
+                            }).then(res => {
+                                this.items = res.data;
+                                this.loginStatus();
+                                Message.success("注册成功")
+                            })
+                        }
                     } else {
                         console.log('error submit!!');
                         return false;
@@ -247,6 +266,21 @@
                 });
 
             },
+            //赋值登录状态
+            loginStatus() {
+                sessionStorage.setItem('state','已登陆');
+                sessionStorage.setItem('token',this.items.token);
+                sessionStorage.setItem('privileges',JSON.stringify(this.items.user.privileges));
+                this.$store.dispatch('asyncUpdateUser', {
+                    id:this.items.user.userId,
+                    username:this.items.user.userName,
+                    token:this.items.token
+                });
+                sessionStorage.setItem('UserState', JSON.stringify(this.$store.state.user));
+                window.location.reload();
+                this.loginVisible = true;
+                this.isLogin = true;
+            },
             //登录
             login(formName) {
                 login({
@@ -257,18 +291,7 @@
                     if (res.data !== null) {
                         //赋值登录状态
                         this.items = res.data;
-                        sessionStorage.setItem('state','已登陆');
-                        sessionStorage.setItem('token',this.items.token);
-                        sessionStorage.setItem('privileges',JSON.stringify(this.items.user.privileges));
-                        this.$store.dispatch('asyncUpdateUser', {
-                            id:this.items.user.userId,
-                            username:this.items.user.userName,
-                            token:this.items.token
-                        });
-                        sessionStorage.setItem('UserState', JSON.stringify(this.$store.state.user));
-                        window.location.reload();
-                        this.loginVisible = true;
-                        this.isLogin = true;
+                        this.loginStatus();
                     }
                 })
             },
