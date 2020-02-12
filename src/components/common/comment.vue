@@ -18,7 +18,7 @@
                         <el-row :gutter="10">
                             <el-col :span="6" v-for="(i,k) in item.imageUrlList" :key="k">
                                 <el-image style="width: 223px; height: 150px"
-                                        :src="i" :preview-src-list="item.imageUrlList"></el-image>
+                                          :src="i" :preview-src-list="item.imageUrlList"></el-image>
                             </el-col>
                         </el-row>
                     </div>
@@ -29,7 +29,9 @@
                                     <span style="line-height: 32px">{{item.createTime}}</span>
                                 </el-col>
                                 <el-col :span="18" style="text-align: right">
-                                    <el-button type="text" style="color:#FF9D52;" size="medium">评论</el-button>
+                                    <el-button type="text" style="color:#FF9D52;" size="medium" @click="showReplyInput(index)">
+                                        评论
+                                    </el-button>
                                 </el-col>
                             </el-row>
                         </div>
@@ -40,12 +42,12 @@
                             <span>&nbsp;&nbsp;：</span>
                             <span style="color: #FF9D52">@{{i.replyName}}</span>
                             <span>&nbsp;&nbsp;{{i.description}}</span>
-                            <el-button type="text" style="color:#FF9D52;" size="medium">&nbsp;&nbsp;&nbsp;&nbsp;回复
+                            <el-button type="text" style="color:#FF9D52;" size="medium" @click="showReplyInput(index)">&nbsp;&nbsp;&nbsp;&nbsp;回复
                             </el-button>
                             <div>{{i.createTime}}</div>
                         </div>
                     </div>
-                    <div class="reply" v-show="item.flag">
+                    <div class="reply" v-show="item.flag" v-if="item.replyList.length > 2">
                         <el-button type="text" style="color:#FF9D52;" size="medium" @click="showReply(index)"
                                    :loading="s">查看更多回复
                         </el-button>
@@ -55,13 +57,31 @@
                         <span>&nbsp;&nbsp;：</span>
                         <span style="color: #FF9D52">@{{i.replyName}}</span>
                         <span>&nbsp;&nbsp;{{i.description}}</span>
-                        <el-button type="text" style="color:#FF9D52;" size="medium">&nbsp;&nbsp;&nbsp;&nbsp;回复
+                        <el-button type="text" style="color:#FF9D52;" size="medium" @click="showReplyInput(index)">&nbsp;&nbsp;&nbsp;&nbsp;回复
                         </el-button>
                         <div>{{i.createTime}}</div>
                     </div>
                     <div class="reply" v-show="!item.flag">
                         <el-button type="text" style="color:#FF9D52;" size="medium" @click="notShowReply(index)">收起
                         </el-button>
+                    </div>
+                    <div class="input" v-show="item.inputFlag">
+                        <el-collapse-transition>
+                            <div v-show="item.inputFlag">
+                                <el-input
+                                        autofocus="true"
+                                        type="textarea"
+                                        :autosize="{ minRows: 2, maxRows: 4}"
+                                        placeholder="请输入内容(少于50字)"
+                                        v-model="textarea"
+                                        maxlength="50"
+                                        show-word-limit>
+                                </el-input>
+                            </div>
+                        </el-collapse-transition>
+                        <div class="btn">
+                            <el-button type="warning" size="small">回复</el-button>
+                        </div>
                     </div>
                 </el-col>
             </el-row>
@@ -80,51 +100,29 @@
 </template>
 <script>
     import {getCommentReply} from '../../api/spot'
+
     export default {
         data() {
             return {
+                showInput: false,
+                textarea: "",
                 // 当前页
                 currentPage: 1,
-                s:false,
-                replyList: [
-                    {
-                        rName:"XXH",
-                        name: "LJQ",
-                        s: "评论测试",
-                        time: "2020-01-01 00:04:51",
-                    },
-                    {
-                        rName:"XXH",
-                        name: "LJQ",
-                        s: "评论测试",
-                        time: "2020-01-01 00:04:51",
-                    },
-                    {
-                        rName:"XXH",
-                        name: "LJQ",
-                        s: "评论测试",
-                        time: "2020-01-01 00:04:51",
-                    },
-                    {
-                        rName:"XXH",
-                        name: "LJQ",
-                        s: "评论测试",
-                        time: "2020-01-01 00:04:51",
-                    },
-                    {
-                        rName:"XXH",
-                        name: "LJQ",
-                        s: "评论测试",
-                        time: "2020-01-01 00:04:51",
-                    },
-                ],
+                s: false,
+                replyList: [],
                 isShow: true,
             }
         },
         props: ['data', 'total'],
         methods: {
+            showReplyInput(i) {
+                this.data[i].inputFlag = !this.data[i].inputFlag;
+            },
+            notShowReplyInput(i) {
+                console.log(1)
+            },
             getPageNumber(pageNumber) {
-                this.$emit("getPageNumber",pageNumber)
+                this.$emit("getPageNumber", pageNumber)
             },
             handleCurrentChange(val) {
                 let vm = this;
@@ -148,14 +146,24 @@
 </script>
 
 <style>
+    .btn {
+        float: right;
+        padding-top: 10px;
+    }
+
+    .input {
+
+    }
+
     .page {
         text-align: right;
     }
+
     .reply {
         color: #666;
         padding-left: 10px;
         padding-right: 10px;
-        padding-top: 5px;
+        padding-top: 3px;
         font-size: 14px;
         border-bottom: 1px solid #eee;
     }
