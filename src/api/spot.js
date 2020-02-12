@@ -1,5 +1,22 @@
 import request from '../utils/request';
 
+//获取评论回复
+export const getCommentReply = (id) => {
+    return request({
+        url: '/spot/reply/' + id,
+        method: 'get'
+    })
+};
+
+//获取景点评论列表
+export const getSpotComment = (query) => {
+    return request({
+        url: '/spot/comments',
+        method: 'get',
+        params: query
+    })
+};
+
 //获取用户是否给景点点赞
 export const getSpotUserStatus = (query) => {
     return request({

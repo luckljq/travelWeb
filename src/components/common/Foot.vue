@@ -3,7 +3,6 @@
         <div class="foot-title">
             LJQ毕业设计
         </div>
-
     </div>
 </template>
 <script>

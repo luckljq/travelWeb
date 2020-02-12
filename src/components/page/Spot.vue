@@ -87,11 +87,18 @@
                 </div>
             </div>
         </div>
+        <el-divider></el-divider>
+        <div class="center">
+            <div class="comment">
+                <vComment :data="data" :total="this.total" v-on:getPageNumber="getPageNumber"></vComment>
+            </div>
+        </div>
     </div>
 </template>
 <script>
+    import vComment from '../common/comment.vue'
     import {Message} from 'element-ui'
-    import {getSpotDetail, spotUserFabulous, getSpotCount, getSpotUserStatus} from '../../api/spot'
+    import {getSpotDetail, spotUserFabulous, getSpotCount, getSpotUserStatus, getSpotComment} from '../../api/spot'
     export default {
         name: 'spot',
         data() {
@@ -101,13 +108,22 @@
                 s:null,
                 ss:'赞',
                 type:'',
+                //表格初始化
+                pageNumber:1,
+                total:0,
+                data:[]
             }
+        },
+        components:{
+            vComment
         },
         created() {
             this.id = this.$route.query.s;
+            //获取景点详细信息
             getSpotDetail(this.id).then(res => {
                 this.spot = res.data
             });
+            //获取景点被点赞总数
             this.getCount();
             let id = this.$store.getters.getUser.id;
             if (id != "") {
@@ -121,8 +137,25 @@
                     }
                 })
             }
+            //获取评论列表
+            this.getComment()
         },
         methods:{
+            getComment() {
+                getSpotComment({
+                    id:this.id,
+                    pageNumber: this.pageNumber,
+                    pageSize: 5
+                }).then(res => {
+                    this.data = res.data.list;
+                    this.total = res.data.total;
+                })
+            },
+            //翻页
+            getPageNumber(pageNumber){
+                this.pageNumber = pageNumber;
+                this.getComment();
+            },
             getCount() {
                 getSpotCount(this.id).then(res => {
                     this.s = res.data;
@@ -160,6 +193,9 @@
     }
 </script>
 <style scoped>
+    .comment {
+        margin-top: 30px;
+    }
     .span {
         color: #FF9D52;
         position: relative;
@@ -167,7 +203,7 @@
         padding-top: 8px;
     }
     .info-content {
-        color: #66667F;
+        color: #666;
         padding-top: 10px;
     }
     .info {
