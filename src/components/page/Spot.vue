@@ -16,15 +16,15 @@
             <div class="center-info">
                 <div class="center-left">概况</div>
                 <div class="center-right">
-                    <el-button type="warning" size="medium" >我要点评</el-button>
+                    <el-button type="warning" size="medium" @click="showCommentVisible">我要点评</el-button>
                 </div>
                 <div class="center-mid">{{spot.description}}</div>
 
             </div>
         </div>
         <div class="center-image">
-            <div class="center" v-if="spot.urls" >
-                <a href="https://www.baidu.com/" target="_blank">
+            <div class="center" v-if="spot.urls" @click="refresh" >
+                <a href="https://www.baidu.com/" target="_blank" >
                     <el-row :gutter="5">
                         <el-col :span="16">
                             <el-image :src=" 'http://localhost' + spot.urls[0]"
@@ -93,6 +93,49 @@
                 <vComment :data="data" :total="this.total" v-on:getPageNumber="getPageNumber"></vComment>
             </div>
         </div>
+
+    <!--新增评论弹出框-->
+        <el-dialog
+                :lock-scroll="false"
+                :visible.sync="commentVisible"
+                width="50%">
+            <div class="cv">
+                <div class="cv-title">{{spot.scenicSpotName}}</div>
+                <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="ms-content">
+                    <el-form-item label="总体评价">
+                        <el-rate
+                                style="margin-top: 6px"
+                                v-model="ruleForm.rate"
+                                :colors="colors">
+                        </el-rate>
+                    </el-form-item>
+                    <el-form-item prop="description" label="内容">
+                        <el-input v-model="ruleForm.description" type="textarea" placeholder="请输入您的评论" size="large">
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item label="上传照片">
+                        <el-upload
+                                action="http://localhost:8888/sev/hotel/upload"
+                                list-type="picture-card"
+                                :headers="{Authorization:token}"
+                                :file-list="file"
+                                :on-preview="handlePictureCardPreview"
+                                :on-success="onSuccess2"
+                                :on-remove="handleRemove"
+                        >
+                            <i class="el-icon-plus"></i>
+                        </el-upload>
+                        <span>图片不超过8张</span>
+                        <el-dialog :visible.sync="dialogVisible" :modal="false">
+                            <img width="100%" :src="dialogImageUrl" alt="">
+                        </el-dialog>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="warning" @click="submitForm('ruleForm')" size="medium">提交</el-button>
+                    </el-form-item>
+                </el-form>
+            </div>
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -103,6 +146,21 @@
         name: 'spot',
         data() {
             return {
+                dialogVisible:false,
+                dialogImageUrl: '',
+                file:[],
+                token: "",
+                colors: ['#99A9BF', '#F7BA2A', '#FF9900'],
+                ruleForm: {
+                    rate: 0,
+                    description: ''
+                },
+                rules: {
+                    description: [
+                        {required: true, message: '请输入评价', trigger: 'blur'}
+                    ]
+                },
+                commentVisible:false,
                 id:'',
                 spot:{},
                 s:null,
@@ -118,6 +176,7 @@
             vComment
         },
         created() {
+
             this.id = this.$route.query.s;
             //获取景点详细信息
             getSpotDetail(this.id).then(res => {
@@ -141,8 +200,61 @@
             this.getComment()
         },
         methods:{
+            refresh(){
+                this.$router.go(0);
+            },
+            //上传图片预览
+            handlePictureCardPreview(file) {
+                this.dialogImageUrl = file.url;
+                this.dialogVisible = true;
+            },
+            onSuccess2(res, file, fileList) {
+                Message.success({
+                    message:res.message,
+                    center:true
+                });
+                this.change(fileList);
+            },
+            handleRemove(file, fileList) {
+                console.log(file.response.data);
+                this.change(fileList);
+            },
+            change(fileList) {
+                this.fileList = [];
+                fileList.forEach(file => {
+                    this.fileList.push(file.response.data)
+                });
+            },
+
+            showCommentVisible () {
+                if(this.$store.getters.getUser.token != "" && this.$store.getters.getUser.token != null) {
+                    this.commentVisible = true;
+                    this.token = "Bearer " + JSON.parse(window.sessionStorage.getItem('UserState')).user.token;
+                } else {
+                    Message.warning({
+                        message: "请您先登录，再进行操作",
+                    });
+                }
+            },
+            submitForm(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        if (this.ruleForm.rate == 0) {
+                            Message.warning({
+                                message:"请选择总体评价，最低为一星",
+                            });
+                        } else {
+                            console.log("11")
+                        }
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
+
+            },
+            //获取评论列表
             getComment() {
-                console.log(1);
                 getSpotComment({
                     id:this.id,
                     pageNumber: this.pageNumber,
@@ -194,6 +306,12 @@
     }
 </script>
 <style scoped>
+    .cv {
+        padding: 1px 66px;
+    }
+    .cv-title {
+        font-size: 25px;
+    }
     .comment {
         margin-top: 30px;
     }

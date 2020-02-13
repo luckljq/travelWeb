@@ -1,6 +1,7 @@
 <template>
     <div v-if="data != null">
         <div class="title">精彩评论</div>
+        <el-button type="warning" size="medium" @click="showVisible" style="float: right">我要点评</el-button>
         <div class="center" v-for="(item,index) in data">
             <el-row :gutter="20">
                 <el-col :span="2">
@@ -10,13 +11,19 @@
                 <el-col :span="22">
                     <div class="user-title">
                         <span>{{item.userName}}</span>
+                        <el-rate
+                                disabled
+                                style="display: inline; margin-left: 10px;"
+                                v-model="item.rate"
+                                :colors="colors">
+                        </el-rate>
                     </div>
                     <div class="info">
                         {{item.description}}
                     </div>
                     <div class="info-image">
                         <el-row :gutter="10">
-                            <el-col :span="6" v-for="(i,k) in item.imageUrlList" :key="k">
+                            <el-col :span="6" v-for="(i,k) in item.imageUrlList" :key="k" v-if="k < 4">
                                 <el-image style="width: 223px; height: 150px"
                                           :src="i" :preview-src-list="item.imageUrlList"></el-image>
                             </el-col>
@@ -104,6 +111,8 @@
     export default {
         data() {
             return {
+                colors: ['#99A9BF', '#F7BA2A', '#FF9900'],
+                rate:5,
                 showInput: false,
                 textarea: "",
                 // 当前页
@@ -117,6 +126,9 @@
         },
         props: ['data', 'total'],
         methods: {
+            showVisible() {
+                this.$parent.showCommentVisible()
+            },
             commentReply(i) {
                 addCommentReply({
                     commentId: this.data[i].id,
@@ -233,21 +245,22 @@
     }
 
     .info {
-        padding-top: 5px;
+        padding-top: 15px;
         color: #666;
     }
 
     .user-title {
+        display: inline;
         color: #FF9D52;
         font-size: 18px;
     }
 
     .center {
         padding: 10px;
-        margin-top: 10px;
     }
 
     .title {
+        display: inline;
         font-size: 25px;
     }
 </style>

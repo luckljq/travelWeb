@@ -8,7 +8,7 @@
             <div class="search">
                 <h3>相关地点</h3>
             </div>
-            <div v-if="this.list.length > 0">
+            <div class="center2" v-if="this.list.length > 0">
                 <div class="search-image" v-for="(item,i) in list" :style="{backgroundImage:'url('+ item.imageUrl +')'}">
                     <a v-bind="{href: 'http://localhost:8088/spot?s=' + item.scenicSpotId}" target="_blank">
                         <div class="search-title">
@@ -59,6 +59,9 @@
     }
 </script>
 <style scoped>
+    .center2 {
+        min-height: 425px;
+    }
     .center {
         height: 425px;
         padding-top: 50px;
