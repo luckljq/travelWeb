@@ -29,7 +29,7 @@
                                     <span style="line-height: 32px">{{item.createTime}}</span>
                                 </el-col>
                                 <el-col :span="18" style="text-align: right">
-                                    <el-button type="text" style="color:#FF9D52;" size="medium" @click="showReplyInput(index)">
+                                    <el-button type="text" style="color:#FF9D52;" size="medium" @click="showReplyInput2(index)">
                                         评论
                                     </el-button>
                                 </el-col>
@@ -42,22 +42,22 @@
                             <span>&nbsp;&nbsp;：</span>
                             <span style="color: #FF9D52">@{{i.replyName}}</span>
                             <span>&nbsp;&nbsp;{{i.description}}</span>
-                            <el-button type="text" style="color:#FF9D52;" size="medium" @click="showReplyInput(index)">&nbsp;&nbsp;&nbsp;&nbsp;回复
+                            <el-button type="text" style="color:#FF9D52;" size="medium" @click="showReplyInput(index,i)">&nbsp;&nbsp;&nbsp;&nbsp;回复
                             </el-button>
                             <div>{{i.createTime}}</div>
                         </div>
                     </div>
                     <div class="reply" v-show="item.flag" v-if="item.replyList.length > 2">
                         <el-button type="text" style="color:#FF9D52;" size="medium" @click="showReply(index)"
-                                   :loading="s">查看更多回复
+                                   >查看更多回复
                         </el-button>
                     </div>
-                    <div class="reply" v-for="i in replyList" v-show="!item.flag">
+                    <div class="reply" v-for="i in item.replyList" v-show="!item.flag">
                         <span style="color: #FF9D52">{{i.userName}}</span>
                         <span>&nbsp;&nbsp;：</span>
                         <span style="color: #FF9D52">@{{i.replyName}}</span>
                         <span>&nbsp;&nbsp;{{i.description}}</span>
-                        <el-button type="text" style="color:#FF9D52;" size="medium" @click="showReplyInput(index)">&nbsp;&nbsp;&nbsp;&nbsp;回复
+                        <el-button type="text" style="color:#FF9D52;" size="medium" @click="showReplyInput(index,i)">&nbsp;&nbsp;&nbsp;&nbsp;回复
                         </el-button>
                         <div>{{i.createTime}}</div>
                     </div>
@@ -80,7 +80,7 @@
                             </div>
                         </el-collapse-transition>
                         <div class="btn">
-                            <el-button type="warning" size="small">回复</el-button>
+                            <el-button type="warning" size="small" @click="commentReply(index)">回复</el-button>
                         </div>
                     </div>
                 </el-col>
@@ -99,8 +99,8 @@
     </div>
 </template>
 <script>
-    import {getCommentReply} from '../../api/spot'
-
+    import {Message} from 'element-ui'
+    import {getCommentReply, addCommentReply} from '../../api/spot'
     export default {
         data() {
             return {
@@ -108,18 +108,72 @@
                 textarea: "",
                 // 当前页
                 currentPage: 1,
-                s: false,
                 replyList: [],
                 isShow: true,
+                //回复参数
+                replyId:null,
+                userId:this.$store.getters.getUser.id
             }
         },
         props: ['data', 'total'],
         methods: {
-            showReplyInput(i) {
-                this.data[i].inputFlag = !this.data[i].inputFlag;
+            commentReply(i) {
+                addCommentReply({
+                    commentId: this.data[i].id,
+                    userId: this.userId,
+                    replyId: this.replyId,
+                    description: this.textarea
+                }).then(res => {
+                    if (this.data[i].replyList.length > 2){
+                        this.showReply(i);
+                    } else {
+                        this.$parent.getComment();
+                    }
+                    this.data[i].inputFlag = false;
+                    this.textarea = "";
+                })
             },
-            notShowReplyInput(i) {
-                console.log(1)
+            showReplyInput(index, i) {
+                if(this.$store.getters.getUser.token != "" && this.$store.getters.getUser.token != null) {
+                    this.textarea = "";
+                    this.data.forEach(item => {
+                       item.inputFlag = false
+                    });
+                    if (this.userId == i.userId) {
+                        Message.warning({
+                            message: "您不能回复自己",
+                        });
+                        this.data[index].inputFlag = false;
+                    } else {
+                        this.data[index].inputFlag = !this.data[index].inputFlag;
+                        this.replyId = i.userId;
+                    }
+                } else {
+                    Message.warning({
+                        message: "请您先登录，再进行操作",
+                    });
+                }
+            },
+            showReplyInput2(i) {
+                if(this.$store.getters.getUser.token != "" && this.$store.getters.getUser.token != null) {
+                    this.textarea = "";
+                    this.data.forEach(item => {
+                        item.inputFlag = false
+                    });
+                    if (this.userId == this.data[i].userId) {
+                        Message.warning({
+                            message: "您不能回复自己",
+                        });
+                        this.data[i].inputFlag = false;
+                    } else {
+                        this.data[i].inputFlag = !this.data[i].inputFlag;
+                        this.replyId = this.data[i].userId;
+                    }
+                } else {
+                    Message.warning({
+                        message: "请您先登录，再进行操作",
+                    });
+                }
             },
             getPageNumber(pageNumber) {
                 this.$emit("getPageNumber", pageNumber)
@@ -130,16 +184,15 @@
                 this.getPageNumber(val);
             },
             showReply(i) {
-                this.s = true;
                 getCommentReply(this.data[i].id).then(res => {
-                    this.replyList = res.data;
+                    this.data[i].replyList = res.data;
                     this.data[i].flag = false;
-                    this.s = false;
                 });
 
             },
             notShowReply(i) {
                 this.data[i].flag = true;
+                this.$parent.getComment();
             }
         }
     }

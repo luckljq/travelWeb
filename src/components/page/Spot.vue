@@ -142,6 +142,7 @@
         },
         methods:{
             getComment() {
+                console.log(1);
                 getSpotComment({
                     id:this.id,
                     pageNumber: this.pageNumber,

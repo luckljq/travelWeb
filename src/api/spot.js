@@ -1,5 +1,13 @@
 import request from '../utils/request';
 
+export const addCommentReply = (query) => {
+    return request({
+        url: '/spot/user/spot/reply',
+        method: "post",
+        data: query
+    })
+};
+
 //获取评论回复
 export const getCommentReply = (id) => {
     return request({
