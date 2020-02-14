@@ -60,7 +60,7 @@
 </script>
 <style scoped>
     .center2 {
-        min-height: 425px;
+        min-height: 500px;
     }
     .center {
         height: 425px;

@@ -115,7 +115,7 @@
                     </el-form-item>
                     <el-form-item label="上传照片">
                         <el-upload
-                                action="http://localhost:8888/sev/hotel/upload"
+                                action="http://localhost:8888/spot/user/comment/image"
                                 list-type="picture-card"
                                 :headers="{Authorization:token}"
                                 :file-list="file"
@@ -125,7 +125,6 @@
                         >
                             <i class="el-icon-plus"></i>
                         </el-upload>
-                        <span>图片不超过8张</span>
                         <el-dialog :visible.sync="dialogVisible" :modal="false">
                             <img width="100%" :src="dialogImageUrl" alt="">
                         </el-dialog>
@@ -141,7 +140,8 @@
 <script>
     import vComment from '../common/comment.vue'
     import {Message} from 'element-ui'
-    import {getSpotDetail, spotUserFabulous, getSpotCount, getSpotUserStatus, getSpotComment} from '../../api/spot'
+    import {getSpotDetail, spotUserFabulous, getSpotCount, getSpotUserStatus, getSpotComment, deleteFile, addComment}
+    from '../../api/spot'
     export default {
         name: 'spot',
         data() {
@@ -149,6 +149,7 @@
                 dialogVisible:false,
                 dialogImageUrl: '',
                 file:[],
+                fileList:[],
                 token: "",
                 colors: ['#99A9BF', '#F7BA2A', '#FF9900'],
                 ruleForm: {
@@ -176,7 +177,6 @@
             vComment
         },
         created() {
-
             this.id = this.$route.query.s;
             //获取景点详细信息
             getSpotDetail(this.id).then(res => {
@@ -200,6 +200,16 @@
             this.getComment()
         },
         methods:{
+            delete(file) {
+                deleteFile({
+                    file:file
+                }).then(res => {
+                    Message.success({
+                        message:res.message,
+                        center:true
+                    });
+                })
+            },
             refresh(){
                 this.$router.go(0);
             },
@@ -216,7 +226,9 @@
                 this.change(fileList);
             },
             handleRemove(file, fileList) {
-                console.log(file.response.data);
+                let str = "F:/test/BS/images" + file.response.data.slice(16);
+                console.log(str);
+                this.delete(str);
                 this.change(fileList);
             },
             change(fileList) {
@@ -244,7 +256,22 @@
                                 message:"请选择总体评价，最低为一星",
                             });
                         } else {
-                            console.log("11")
+                            addComment({
+                                spotId: this.id,
+                                userId: this.$store.getters.getUser.id,
+                                rate: this.ruleForm.rate,
+                                description: this.ruleForm.description,
+                                imageUrls: this.fileList
+                            }).then(res => {
+                                Message.success({
+                                    message:"评论成功",
+                                });
+                                this.commentVisible = false;
+                                this.ruleForm.rate = 0;
+                                this.ruleForm.description = "";
+                                this.file = [];
+                                this.getComment();
+                            });
                         }
                     } else {
                         console.log('error submit!!');

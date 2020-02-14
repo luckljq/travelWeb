@@ -1,5 +1,24 @@
 import request from '../utils/request';
 
+//新增评论
+export const addComment = (query) => {
+    return request({
+        url: '/spot/user/comment',
+        method: 'post',
+        data: query
+    })
+};
+
+//删除图片
+export const deleteFile = (query) => {
+    return request({
+        url: '/spot/user/delete/image',
+        method: 'delete',
+        params: query
+    })
+};
+
+//新增回复
 export const addCommentReply = (query) => {
     return request({
         url: '/spot/user/spot/reply',
