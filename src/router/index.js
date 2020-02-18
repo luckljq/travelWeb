@@ -51,6 +51,48 @@ export default new Router({
                     meta: { title: '景点' }
                 },
                 {
+                    path: '/user',
+                    component: resolve => require(['../components/page/UserCenter.vue'], resolve),
+                    meta: { title: '个人中心' },
+                    children:[
+                        {
+                            path: '/info',
+                            component: resolve => require(['../components/page/user/Info.vue'], resolve),
+                            meta: { title: '用户信息' }
+                        },
+                        {
+                            path: '/travels',
+                            component: resolve => require(['../components/page/user/UserTravels.vue'], resolve),
+                            meta: { title: '我的游记' }
+                        },
+                        {
+                            path: '/userQuestions',
+                            component: resolve => require(['../components/page/user/UserQuestions.vue'], resolve),
+                            meta: { title: '我的问答' }
+                        },
+                        {
+                            path: '/comments',
+                            component: resolve => require(['../components/page/user/UserComments.vue'], resolve),
+                            meta: { title: '我的评论' }
+                        },
+                        {
+                            path: '/news',
+                            component: resolve => require(['../components/page/user/News.vue'], resolve),
+                            meta: { title: '我的消息' }
+                        },
+                        {
+                            path: '/want',
+                            component: resolve => require(['../components/page/user/Want.vue'], resolve),
+                            meta: { title: '我想去的' }
+                        },
+                        {
+                            path: '/change',
+                            component: resolve => require(['../components/page/user/Change.vue'], resolve),
+                            meta: { title: '我想去的' }
+                        },
+                    ]
+                },
+                {
                     path: '/404',
                     component: resolve => require(['../components/page/404.vue'], resolve),
                     meta: { title: '404' }

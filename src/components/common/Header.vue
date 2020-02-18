@@ -2,12 +2,12 @@
     <div>
         <div class="header">
             <el-row>
-                <el-col :span="6">
+                <el-col :span="8">
                     <div class="logo">
                         旅行信息分享平台
                     </div>
                 </el-col>
-                <el-col :span="12">
+                <el-col :span="8">
                     <el-menu class="el-menu-demo"
                              background-color="#3C3C3C"
                              :default-active="onRoutes"
@@ -20,11 +20,10 @@
                         <el-menu-item index="rankingList" style="font-size: 18px">排行榜</el-menu-item>
                         <el-menu-item index="diary" style="font-size: 18px">旅行日记</el-menu-item>
                         <el-menu-item index="questions" style="font-size: 18px">问答</el-menu-item>
-                        <el-menu-item index="6" style="font-size: 18px"><a href="https://www.ele.me" target="_blank">订单管理</a>
-                        </el-menu-item>
+<!--                        <el-menu-item index="info" style="font-size: 18px" v-if="this.$store.getters.getUser.token != ''">个人中心</el-menu-item>-->
                     </el-menu>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="8">
                     <div class="header-user-con" v-if="isLogin">
                         <!-- 用户头像 -->
                         <div class="user-avator"><img src="../../assets/img/img.jpg"></div>
@@ -34,6 +33,7 @@
                             {{username}} <i class="el-icon-caret-bottom"></i>
                         </span>
                             <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item divided command="user">个人中心</el-dropdown-item>
                                 <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
@@ -425,6 +425,9 @@
                     sessionStorage.clear();
                     // this.isLogin = false;
                     window.location.reload()
+                }
+                if (command === 'user') {
+                    this.$router.push('info')
                 }
             },
             handleSelect(key, keyPath) {

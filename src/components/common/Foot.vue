@@ -22,7 +22,7 @@
         position: relative;
         box-sizing: border-box;
         width: 100%;
-        height: 150px;
+        height: 300px;
         font-size: 50px;
         text-align: center;
     }
