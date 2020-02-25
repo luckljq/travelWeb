@@ -26,7 +26,7 @@
                 <el-col :span="8">
                     <div class="header-user-con" v-if="isLogin">
                         <!-- 用户头像 -->
-                        <div class="user-avator"><img src="../../assets/img/img.jpg"></div>
+                        <div class="user-avator"><img :src="image"></div>
                         <!-- 用户名下拉菜单 -->
                         <el-dropdown class="user-name" trigger="click" @command="handleCommand">
                         <span class="el-dropdown-link">
@@ -207,6 +207,7 @@
                 }
             };
             return {
+                image:sessionStorage.getItem("image"),
                 //验证码
                 timer: null,
                 count: '',
@@ -388,6 +389,7 @@
             //赋值登录状态
             loginStatus() {
                 sessionStorage.setItem('state', '已登陆');
+                sessionStorage.setItem('image', "http://localhost" + this.items.user.headImage);
                 sessionStorage.setItem('token', this.items.token);
                 sessionStorage.setItem('privileges', JSON.stringify(this.items.user.privileges));
                 this.$store.dispatch('asyncUpdateUser', {

@@ -11,6 +11,7 @@
                 :options="options"
                 @expand-change="hand"
                 @change="handChange"
+                :placeholder="locationName"
         ></el-cascader>
     </div>
 </template>
@@ -26,6 +27,7 @@
         created() {
             this.getFirst()
         },
+        props: ['locationName'],
         methods: {
             handChange(value) {
                 this.$emit("getValue",value)
