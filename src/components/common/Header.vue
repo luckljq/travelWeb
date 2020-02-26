@@ -26,7 +26,9 @@
                 <el-col :span="8">
                     <div class="header-user-con" v-if="isLogin">
                         <!-- 用户头像 -->
-                        <div class="user-avator"><img :src="image"></div>
+                        <el-badge :value="12" class="item">
+                            <div class="user-avator"><img :src="image"></div>
+                        </el-badge>
                         <!-- 用户名下拉菜单 -->
                         <el-dropdown class="user-name" trigger="click" @command="handleCommand">
                         <span class="el-dropdown-link">
@@ -147,7 +149,7 @@
                         </el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button icon="el-icon-mobile-phone" @click="send" style="width: 100%" type="success"
+                        <el-button icon="el-icon-mobile-phone" @click="send2" style="width: 100%" type="success"
                                    :disabled="disabled=!show2">
                             <span v-show="show2" class="word">获取验证码</span>
                             <span v-show="!show2" class="word">{{count}} s 后可重新发送</span>
@@ -210,6 +212,7 @@
                 image:sessionStorage.getItem("image"),
                 //验证码
                 timer: null,
+                timer2: null,
                 count: '',
                 show: true,
                 show2: true,
@@ -310,15 +313,52 @@
                             this.key = res.data.key;
                             this.phone = res.data.phone;
                         });
-                        if (!this.timer) {
+                        if (!this.timer2) {
                             this.count = TIME_COUNT;
                             this.show = false;
+                            this.timer2 = setInterval(() => {
+                                if (this.count > 0 && this.count <= TIME_COUNT) {
+                                    this.count--;
+                                } else {
+                                    this.show = true;
+                                    // 清除定时器
+                                    clearInterval(this.timer);
+                                    this.timer2 = null;
+                                }
+                            }, 1000)
+                        }
+                    }
+                }
+            },
+            //发送验证码
+            send2() {
+                let phone = "";
+                if (this.resetVisible == true) {
+                    phone = this.ruleForm3.phone
+                } else {
+                    phone = this.ruleForm2.phone
+                }
+                if (phone != "") {
+                    if (phone == "") {
+                        Message.warning({
+                            message: "请您先输入电话号码",
+                        });
+                    } else {
+                        getCode(phone).then(res => {
+                            Message.success({
+                                message: "发送验证码成功"
+                            });
+                            this.key = res.data.key;
+                            this.phone = res.data.phone;
+                        });
+                        if (!this.timer) {
+                            this.count = TIME_COUNT;
                             this.show2 = false;
                             this.timer = setInterval(() => {
                                 if (this.count > 0 && this.count <= TIME_COUNT) {
                                     this.count--;
                                 } else {
-                                    this.show = true;
+                                    this.show2 = true;
                                     // 清除定时器
                                     clearInterval(this.timer);
                                     this.timer = null;
@@ -446,6 +486,9 @@
     }
 </script>
 <style>
+    .item {
+        margin-right: 20px;
+    }
     .word {
         letter-spacing: 1em;
         text-align: center;

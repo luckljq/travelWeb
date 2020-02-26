@@ -53,7 +53,7 @@
                             <el-form-item label="原手机号码">
                                 <el-input v-model="ruleForm2.phone" placeholder="请输入您的电话" style="width: 215px"></el-input>
                                 <el-button icon="el-icon-mobile-phone" @click="send()"
-                                           style="width: 120px; margin-left: 10px" type="success"
+                                           style="width: 150px; margin-left: 10px" type="success"
                                            :disabled="disabled=!show">
                                     <span v-show="show">获取验证码</span>
                                     <span v-show="!show">{{count}} s 后可重新发送</span>
@@ -71,11 +71,11 @@
                         <el-form :model="ruleForm3" ref="ruleForm3" label-width="100px" class="demo-ruleForm" >
                             <el-form-item label="新手机号">
                                 <el-input v-model="ruleForm3.phone" placeholder="请输入您的电话" style="width: 215px"></el-input>
-                                <el-button icon="el-icon-mobile-phone" @click="send()"
-                                           style="width: 120px; margin-left: 10px" type="success"
-                                           :disabled="disabled=!show">
-                                    <span v-show="show">获取验证码</span>
-                                    <span v-show="!show">{{count}} s 后可重新发送</span>
+                                <el-button icon="el-icon-mobile-phone" @click="send2()"
+                                           style="width: 150px; margin-left: 10px" type="success"
+                                           :disabled="disabled=!show2">
+                                    <span v-show="show2">获取验证码</span>
+                                    <span v-show="!show2">{{count}} s 后可重新发送</span>
                                 </el-button>
                             </el-form-item>
                             <el-form-item label="验证码">
@@ -101,7 +101,7 @@
     import location from '../../common/Location'
     import {getCode} from '../../../api/login'
     import {Message} from 'element-ui'
-    import {getUserDetail, update} from '../../../api/sysApi'
+    import {getUserDetail, update, verificationCode, changePhone} from '../../../api/sysApi'
 
     const TIME_COUNT = 60;
     export default {
@@ -110,12 +110,15 @@
                 token: "Bearer " + JSON.parse(window.sessionStorage.getItem('UserState')).user.token,
                 imageUrl: '',
                 locationName: '请选择',
-                active: 0,
+                active: 3,
                 key: "",
                 phone: "",
                 show: true,
+                show2: true,
+                timer3: null,
+                timer4: null,
                 count: '',
-                activeName: 'first',
+                    activeName: 'first',
                 ruleForm3: {
                     phone: "",
                     code: ""
@@ -173,13 +176,44 @@
                 return isJPG && isLt2M;
             },
             next3(){
-
+                this.activeName = "first";
+                this.active = 0;
+                this.ruleForm2 ={
+                    phone: "",
+                    code: ""
+                };
+                this.ruleForm3 ={
+                    phone: "",
+                    code: ""
+                };
             },
             next2() {
-                this.active = 3;
+                if(this.ruleForm3.phone == this.phone) {
+                    changePhone({
+                        key: this.key,
+                        code: this.ruleForm3.code,
+                        phone: this.ruleForm3.phone,
+                        id: this.$store.getters.getUser.id
+                    }).then(res => {
+                        this.active = 3;
+                    })
+                } else {
+                Message.warning("电话号码不一致")
+            }
             },
             next() {
-                this.active = 1;
+                if(this.ruleForm2.phone == this.phone) {
+                    verificationCode({
+                        key: this.key,
+                        code: this.ruleForm2.code,
+                        phone: this.ruleForm2.phone,
+                        id: this.$store.getters.getUser.id
+                    }).then(res => {
+                        this.active = 1;
+                    });
+                } else {
+                    Message.warning("请重新获取验证码")
+                }
             },
             //发送验证码
             send() {
@@ -191,17 +225,47 @@
                         this.key = res.data.key;
                         this.phone = res.data.phone;
                     });
-                    if (!this.timer) {
+                    if (!this.timer3) {
                         this.count = TIME_COUNT;
                         this.show = false;
-                        this.timer = setInterval(() => {
+                        this.timer3 = setInterval(() => {
                             if (this.count > 0 && this.count <= TIME_COUNT) {
                                 this.count--;
                             } else {
                                 this.show = true;
                                 // 清除定时器
-                                clearInterval(this.timer);
-                                this.timer = null;
+                                clearInterval(this.timer3);
+                                this.timer3 = null;
+                            }
+                        }, 1000)
+                    }
+                } else {
+                    Message.warning({
+                        message: "请您先输入电话号码",
+                    });
+                }
+            },
+            //发送验证码2
+            send2() {
+                if (this.ruleForm3.phone != "") {
+                    getCode(this.ruleForm3.phone).then(res => {
+                        Message.success({
+                            message: "发送验证码成功"
+                        });
+                        this.key = res.data.key;
+                        this.phone = res.data.phone;
+                    });
+                    if (!this.timer4) {
+                        this.count = TIME_COUNT;
+                        this.show2 = false;
+                        this.timer4 = setInterval(() => {
+                            if (this.count > 0 && this.count <= TIME_COUNT) {
+                                this.count--;
+                            } else {
+                                this.show2 = true;
+                                // 清除定时器
+                                clearInterval(this.timer4);
+                                this.timer4 = null;
                             }
                         }, 1000)
                     }

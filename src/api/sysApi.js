@@ -5,6 +5,23 @@ import request from '../utils/request';
  * @author ljq
  * @date 2019/12/24　11:16
  */
+//修改手机号
+export const changePhone = (query) => {
+    return request({
+        url: '/sys/user/changePhone',
+        method: 'post',
+        data: query
+    })
+};
+
+//验证 验证码
+export const verificationCode = (query) => {
+    return request({
+        url:'/sys/verificationCode',
+        method: 'get',
+        params: query
+    })
+};
 
 //编辑用户信息
 export const update = (query) => {
