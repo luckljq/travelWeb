@@ -26,16 +26,20 @@
                 <el-col :span="8">
                     <div class="header-user-con" v-if="isLogin">
                         <!-- 用户头像 -->
-                        <el-badge :value="12" class="item">
                             <div class="user-avator"><img :src="image"></div>
-                        </el-badge>
                         <!-- 用户名下拉菜单 -->
                         <el-dropdown class="user-name" trigger="click" @command="handleCommand">
-                        <span class="el-dropdown-link">
-                            {{username}} <i class="el-icon-caret-bottom"></i>
-                        </span>
+                            <span class="el-dropdown-link" >
+                                {{username}}
+                                <i class="el-icon-caret-bottom"></i>
+                                <el-badge is-dot class="item" v-show="showCount"/>
+                            </span>
                             <el-dropdown-menu slot="dropdown">
                                 <el-dropdown-item divided command="user">个人中心</el-dropdown-item>
+                                <el-dropdown-item divided command="message">
+                                    我的消息<el-badge class="mark" :value="messageCount" />
+                                </el-dropdown-item>
+                                <el-dropdown-item divided command="notice">系统公告</el-dropdown-item>
                                 <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
@@ -185,6 +189,7 @@
 <script>
     import {Message} from 'element-ui'
     import {login, register, getCode, reset} from '../../api/login'
+    import {getCount} from '../../api/spot'
 
     const TIME_COUNT = 60;
     export default {
@@ -209,6 +214,9 @@
                 }
             };
             return {
+                showCount: false,
+                messageCount:'',
+                noticeCount:'',
                 image:sessionStorage.getItem("image"),
                 //验证码
                 timer: null,
@@ -453,6 +461,7 @@
                         //赋值登录状态
                         this.items = res.data;
                         this.loginStatus();
+
                     }
                 })
             },
@@ -471,14 +480,37 @@
                 if (command === 'user') {
                     this.$router.push('info')
                 }
+                if (command === 'message') {
+                    this.$router.push('news');
+                    if (this.noticeCount == '') {
+                        this.showCount = false;
+                    }
+                    this.messageCount = ''
+                }
+                if (command === 'notice') {
+                    this.$router.push('notice');
+                    if (this.messageCount == '') {
+                        this.showCount = false;
+                    }
+                    this.noticeCount = ''
+                }
             },
             handleSelect(key, keyPath) {
                 console.log(key, keyPath);
+            },
+            getMessageCount() {
+                getCount(this.$store.getters.getUser.id).then(res => {
+                    if(res.data > 0) {
+                        this.messageCount = res.data;
+                        this.showCount = true;
+                    }
+                })
             }
         },
         created() {
             if (this.$store.getters.getUser.token != "" && this.$store.getters.getUser.token != null) {
                 this.isLogin = true;
+                this.getMessageCount()
             }
         },
         mounted() {
@@ -487,7 +519,7 @@
 </script>
 <style>
     .item {
-        margin-right: 20px;
+
     }
     .word {
         letter-spacing: 1em;

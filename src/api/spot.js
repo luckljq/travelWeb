@@ -1,5 +1,36 @@
 import request from '../utils/request';
 
+//获取用户未读消息数
+export const getCount = (id) => {
+    return request({
+        url: '/spot/user/message/count/' + id,
+        method: 'get'
+    })
+};
+
+//获取回复
+export const getReply = (query) => {
+    return request({
+        url: '/spot/user/reply',
+        method: 'get',
+        params: query
+    })
+};
+
+//获取评论
+export const getComment = (id) => {
+    return request({
+        url: '/spot/user/comment/' + id,
+        method: 'get'
+    })
+};
+//获取消息列表
+export const getMessages = (id) => {
+    return request({
+        url: '/spot/user/message/' + id,
+        method: 'get'
+    })
+};
 //新增评论
 export const addComment = (query) => {
     return request({

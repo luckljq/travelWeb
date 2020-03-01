@@ -71,9 +71,9 @@ export default new Router({
                             meta: { title: '我的问答' }
                         },
                         {
-                            path: '/comments',
-                            component: resolve => require(['../components/page/user/UserComments.vue'], resolve),
-                            meta: { title: '我的评论' }
+                            path: '/notice',
+                            component: resolve => require(['../components/page/user/SysNotice.vue'], resolve),
+                            meta: { title: '系统公告' }
                         },
                         {
                             path: '/news',
@@ -81,13 +81,13 @@ export default new Router({
                             meta: { title: '我的消息' }
                         },
                         {
-                            path: '/want',
-                            component: resolve => require(['../components/page/user/Want.vue'], resolve),
-                            meta: { title: '我想去的' }
+                            path: '/comments',
+                            component: resolve => require(['../components/page/user/Comments.vue'], resolve),
+                            meta: { title: '我的评论' }
                         },
                         {
-                            path: '/change',
-                            component: resolve => require(['../components/page/user/Change.vue'], resolve),
+                            path: '/want',
+                            component: resolve => require(['../components/page/user/Want.vue'], resolve),
                             meta: { title: '我想去的' }
                         },
                     ]

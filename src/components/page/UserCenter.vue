@@ -6,7 +6,7 @@
                     <el-menu
                             active-text-color="#ffa800"
                             router
-                            default-active="/info">
+                            :default-active="active">
                         <el-menu-item index="/info">
                             <i class="el-icon-user-solid"></i>
                             <span style="font-size: 15px">我的信息</span>
@@ -20,12 +20,16 @@
                             <span style="font-size: 15px">我的问答</span>
                         </el-menu-item>
                         <el-menu-item index="/comments">
-                            <i class="el-icon-s-order"></i>
+                            <i class="el-icon-s-comment"></i>
                             <span style="font-size: 15px">我的评论</span>
                         </el-menu-item>
                         <el-menu-item index="/news">
                             <i class="el-icon-info"></i>
                             <span style="font-size: 15px">我的消息</span>
+                        </el-menu-item>
+                        <el-menu-item index="/notice">
+                            <i class="el-icon-s-order"></i>
+                            <span style="font-size: 15px">系统公告</span>
                         </el-menu-item>
                         <el-menu-item index="/want">
                             <i class="el-icon-star-on"></i>
@@ -44,7 +48,7 @@
     export default {
         data() {
             return {
-
+                active: location.pathname,
             }
         },
         computed: {
@@ -52,6 +56,11 @@
                 return this.$route.path.replace('/', '');
             }
         },
+        watch: {
+            $route() {
+                this.active = location.pathname
+            }
+        }
     }
 </script>
 <style>

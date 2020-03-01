@@ -110,7 +110,7 @@
                 token: "Bearer " + JSON.parse(window.sessionStorage.getItem('UserState')).user.token,
                 imageUrl: '',
                 locationName: '请选择',
-                active: 3,
+                active: 0,
                 key: "",
                 phone: "",
                 show: true,
