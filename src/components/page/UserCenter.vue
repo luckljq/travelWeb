@@ -76,5 +76,6 @@
         padding-top: 40px;
         margin:0 auto;
         width: 1000px;
+        min-height: 700px;
     }
 </style>

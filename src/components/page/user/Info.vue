@@ -37,7 +37,7 @@
                 </el-form>
             </el-tab-pane>
             <el-tab-pane label="更换绑定" name="second">
-                <div class="title">
+                <div class="title2">
                     <el-steps :active="active" finish-status="success" >
                         <el-step title="身份验证"></el-step>
                         <el-step title="修改绑定手机"></el-step>
@@ -357,7 +357,7 @@
         /*padding-left: 100px;*/
     }
 
-    .title {
+    .title2 {
         margin-top: 20px;
         padding-bottom:20px;
     }

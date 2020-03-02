@@ -27,6 +27,15 @@
                         </el-card>
                     </el-timeline-item>
                 </el-timeline>
+                <div class="page">
+                    <el-pagination
+                            :current-page="pageNumber"
+                            @current-change="handleCurrentChange"
+                            layout="total, prev, pager, next"
+                            :page-size="pageSize"
+                            :total="this.total">
+                    </el-pagination>
+                </div>
             </div>
         </div>
 
@@ -115,13 +124,21 @@
                 commentData:{},
                 data:[],
                 commentVisible:false,
-                i:null
+                i:null,
+                // 当前页
+                pageNumber: 1,
+                pageSize:5,
+                total:0
             }
         },
         created(){
             this.getUserMessage();
         },
         methods:{
+            handleCurrentChange(val) {
+                this.pageNumber = val;
+                this.getUserMessage();
+            },
             commentReply() {
                 addCommentReply({
                     commentId: this.commentData.id,
@@ -152,8 +169,12 @@
                 }
             },
             getUserMessage(){
-                getMessages(this.$store.getters.getUser.id).then(res => {
-                    this.data = res.data;
+                getMessages(this.$store.getters.getUser.id, {
+                    pageNumber : this.pageNumber,
+                    pageSize : this.pageSize,
+                }).then(res => {
+                    this.data = res.data.list;
+                    this.total = res.data.total;
                 })
             },
             openMessage(i){
@@ -177,6 +198,9 @@
     }
 </script>
 <style>
+    .page {
+        text-align: right;
+    }
     .input {
         padding-top: 10px
     }

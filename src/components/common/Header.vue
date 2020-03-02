@@ -39,7 +39,6 @@
                                 <el-dropdown-item divided command="message">
                                     我的消息<el-badge class="mark" :value="messageCount" />
                                 </el-dropdown-item>
-                                <el-dropdown-item divided command="notice">系统公告</el-dropdown-item>
                                 <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
@@ -482,17 +481,8 @@
                 }
                 if (command === 'message') {
                     this.$router.push('news');
-                    if (this.noticeCount == '') {
-                        this.showCount = false;
-                    }
+                    this.showCount = false;
                     this.messageCount = ''
-                }
-                if (command === 'notice') {
-                    this.$router.push('notice');
-                    if (this.messageCount == '') {
-                        this.showCount = false;
-                    }
-                    this.noticeCount = ''
                 }
             },
             handleSelect(key, keyPath) {

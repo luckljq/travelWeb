@@ -37,14 +37,13 @@
                 data:[],
                 // 当前页
                 pageNumber: 1,
-                pageSize:6,
+                pageSize:5,
                 total:0
             }
         },
         methods:{
             handleCurrentChange(val) {
                 this.pageNumber = val;
-                console.log(this.pageNumber);
                 this.getData()
             },
             getData() {

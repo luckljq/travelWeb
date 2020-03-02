@@ -25,10 +25,11 @@ export const getComment = (id) => {
     })
 };
 //获取消息列表
-export const getMessages = (id) => {
+export const getMessages = (id, query) => {
     return request({
         url: '/spot/user/message/' + id,
-        method: 'get'
+        method: 'get',
+        params: query
     })
 };
 //新增评论
