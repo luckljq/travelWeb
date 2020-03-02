@@ -5,6 +5,14 @@ import request from '../utils/request';
  * @author ljq
  * @date 2019/12/24　11:16
  */
+//获取公告列表
+export const getNotices = (query) => {
+    return request({
+        url: '/sys/user/notices',
+        method: 'get',
+        params: query
+    })
+};
 //修改手机号
 export const changePhone = (query) => {
     return request({
