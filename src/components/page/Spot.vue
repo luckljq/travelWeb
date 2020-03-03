@@ -44,7 +44,8 @@
                 </a>
             </div>
         </div>
-        <div class="center" >
+        <div class="center-bottom">
+            <div class="center" v-if="spotType == 2" >
             <div class="info">
                 <el-row :gutter="50">
                     <el-col :span="8">
@@ -87,10 +88,92 @@
                 </div>
             </div>
         </div>
-        <el-divider></el-divider>
-        <div class="center">
-            <div class="comment">
-                <vComment :data="data" :total="this.total" v-on:getPageNumber="getPageNumber"></vComment>
+        </div>
+        <div class="center-bottom">
+            <div class="center" v-if="spotType == 1">
+                <el-row :gutter="150">
+                    <el-col :span="12">
+                        <div class="strategy">
+                            <div class="strategy-title">
+                                <i class="el-icon-dessert" style="padding-right: 10px"></i>必吃美食推荐
+                            </div>
+                            <div class="strategy-info">
+                                <el-card class="box-card" v-for="(item,i) in foodStrategy" v-if="i == 0">
+                                <div class="strategy-info-title">
+                                    <el-tag class="strategy-tag" >{{i + 1}}</el-tag>
+                                    <a href="https://www.baidu.com/" target="_blank" style="color: #FF9D52">
+                                        {{item.strategyName}}
+                                    </a>
+                                </div>
+                                <div class="strategy-info-image">
+                                    <el-image :src="item.imageUrl" style="height: 215px; width: 383px"></el-image>
+                                </div>
+                                <div class="strategy-info-description">
+                                    {{item.description}}
+                                </div>
+                                </el-card>
+                                <el-card class="box-card2" v-for="(item,i) in foodStrategy" v-if="i > 0 && i < 3">
+                                    <div class="strategy-info-title">
+                                        <el-tag class="strategy-tag" >{{i + 1}}</el-tag>
+                                        <a href="https://www.baidu.com/" target="_blank" style="color: #FF9D52">
+                                            {{item.strategyName}}
+                                        </a>
+                                    </div>
+                                    <div class="strategy-info-description">
+                                        {{item.description}}
+                                    </div>
+                                </el-card>
+                            </div>
+                            <div class="strategy-foot">
+                                <a href="https://www.baidu.com/" target="_blank" style="color: #FF9D52">更多美食</a>
+                            </div>
+                        </div>
+                    </el-col>
+                    <el-col :span="12">
+                        <div class="strategy">
+                            <div class="strategy-title">
+                                <i class="el-icon-school" style="padding-right: 10px"></i>酒店住宿攻略
+                            </div>
+                            <div class="strategy-info">
+                                <el-card class="box-card" v-for="(item, i) in hotelStrategy" v-if="i == 0">
+                                    <div class="strategy-info-title" >
+                                        <el-tag class="strategy-tag">{{i + 1}}</el-tag>
+                                        <a href="https://www.baidu.com/" target="_blank" style="color: #FF9D52">
+                                            {{item.strategyName}}
+                                        </a>
+                                    </div>
+                                    <div class="strategy-info-image">
+                                        <el-image :src="item.imageUrl[0]" style="height: 215px"></el-image>
+                                    </div>
+                                    <div class="strategy-info-description">
+                                        {{item.description}}
+                                    </div>
+                                </el-card>
+                                <el-card class="box-card2" v-for="(item, i) in hotelStrategy" v-if="i > 0 && i < 3">
+                                    <div class="strategy-info-title" >
+                                        <el-tag class="strategy-tag">{{i + 1}}</el-tag>
+                                        <a href="https://www.baidu.com/" target="_blank" style="color: #FF9D52">
+                                            {{item.strategyName}}
+                                        </a>
+                                    </div>
+                                    <div class="strategy-info-description">
+                                        {{item.description}}
+                                    </div>
+                                </el-card>
+                            </div>
+                            <div class="strategy-foot">
+                                <a href="https://www.baidu.com/" target="_blank" style="color: #FF9D52" >更多住宿</a>
+                            </div>
+                        </div>
+                    </el-col>
+                </el-row>
+            </div>
+        </div>
+        <div style="background-color: #fafafa">
+            <div class="center">
+                <div class="comment">
+                    <vComment :data="data" :total="this.total" v-on:getPageNumber="getPageNumber"></vComment>
+                </div>
             </div>
         </div>
 
@@ -140,12 +223,16 @@
 <script>
     import vComment from '../common/comment.vue'
     import {Message} from 'element-ui'
-    import {getSpotDetail, spotUserFabulous, getSpotCount, getSpotUserStatus, getSpotComment, deleteFile, addComment}
+    import {getSpotDetail, spotUserFabulous, getSpotCount, getSpotUserStatus, getSpotComment, deleteFile, addComment
+    , getFoodList, getHotelList}
     from '../../api/spot'
     export default {
         name: 'spot',
         data() {
             return {
+                foodStrategy:[],
+                hotelStrategy:[],
+                spotType:'',
                 dialogVisible:false,
                 dialogImageUrl: '',
                 file:[],
@@ -178,6 +265,7 @@
         },
         created() {
             this.id = this.$route.query.s;
+            this.spotType = this.$route.query.t;
             //获取景点详细信息
             getSpotDetail(this.id).then(res => {
                 this.spot = res.data
@@ -197,9 +285,27 @@
                 })
             }
             //获取评论列表
-            this.getComment()
+            this.getComment();
+            if(this.spotType == 1) {
+                this.getFoods();
+                this.getHotels();
+            }
         },
         methods:{
+            getHotels() {
+                getHotelList({
+                    id: this.id
+                }).then(res => {
+                    this.hotelStrategy = res.data.list;
+                })
+            },
+            getFoods() {
+                getFoodList({
+                    id: this.id
+                }).then(res => {
+                    this.foodStrategy = res.data.list;
+                })
+            },
             delete(file) {
                 deleteFile({
                     file:file
@@ -333,6 +439,51 @@
     }
 </script>
 <style scoped>
+    .strategy-foot {
+        padding: 15px;
+        text-align: center;
+        margin-top: 30px;
+        border-top: 1px dashed black;
+    }
+    .strategy-tag {
+        line-height: 26px;
+        background-color:#ff9d00;
+        color: white;
+        font-size: 15px;
+    }
+    .strategy-info-image{
+
+    }
+    .strategy-info-description {
+        height: 84px;
+        display: -webkit-box;  /*  display: -webkit-box; 必须结合的属性 ，将对象作为弹性伸缩盒子模型显示  */
+        -webkit-box-orient: vertical; /*  -webkit-box-orient 必须结合的属性 ，设置或检索伸缩盒对象的子元素的排列方式  */
+        -webkit-line-clamp: 4; /*  -webkit-line-clamp用来限制在一个块元素显示的文本的行数 */
+        overflow: hidden;
+    }
+    .strategy-info-title {
+        font-size: 20px;
+        padding-bottom: 10px;
+    }
+    .box-card2 {
+        margin-top: 20px;
+        height: 150px;
+
+    }
+    .box-card {
+        margin-top: 20px;
+        height: 350px;
+    }
+    .strategy-info {
+
+    }
+    .strategy-title {
+        font-size: 30px;
+
+    }
+    .strategy {
+        margin-top: 20px;
+    }
     .cv {
         padding: 1px 66px;
     }
@@ -363,13 +514,16 @@
         float: right;
 
     }
+    .center-bottom {
+        border-bottom: 1px solid #eee;
+    }
     .center {
         margin:0 auto;
         width: 1000px;
     }
     .header2-title {
         display: inline;
-        font-size: 30px;
+        font-size: 40px;
         color: #333;
     }
     .center-info {

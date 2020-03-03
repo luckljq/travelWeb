@@ -1,5 +1,22 @@
 import request from '../utils/request';
 
+//获取景点酒店列表接口
+export const getHotelList = (query) => {
+    return request({
+        url:'/sev/hotels',
+        method:'get',
+        params: query
+    })
+};
+
+//获取景点美食列表接口
+export const getFoodList = (query) => {
+    return request({
+        url:'/sev/foods',
+        method: 'get',
+        params: query
+    })
+};
 //获取用户未读消息数
 export const getCount = (id) => {
     return request({
