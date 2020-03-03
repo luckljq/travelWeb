@@ -51,6 +51,16 @@ export default new Router({
                     meta: { title: '景点' }
                 },
                 {
+                    path: '/foodStrategy',
+                    component: resolve => require(['../components/page/FoodStrategy.vue'], resolve),
+                    meta: { title: '美食攻略' }
+                },
+                {
+                    path: '/hotelStrategy',
+                    component: resolve => require(['../components/page/HotelStrategy.vue'], resolve),
+                    meta: { title: '住宿攻略' }
+                },
+                {
                     path: '/user',
                     component: resolve => require(['../components/page/UserCenter.vue'], resolve),
                     meta: { title: '个人中心' },

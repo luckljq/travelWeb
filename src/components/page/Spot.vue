@@ -101,7 +101,7 @@
                                 <el-card class="box-card" v-for="(item,i) in foodStrategy" v-if="i == 0">
                                 <div class="strategy-info-title">
                                     <el-tag class="strategy-tag" >{{i + 1}}</el-tag>
-                                    <a href="https://www.baidu.com/" target="_blank" style="color: #FF9D52">
+                                    <a v-bind="{ href: foodUrl + id  + '&f=' + item.id}" target="_blank" style="color: #FF9D52">
                                         {{item.strategyName}}
                                     </a>
                                 </div>
@@ -115,7 +115,7 @@
                                 <el-card class="box-card2" v-for="(item,i) in foodStrategy" v-if="i > 0 && i < 3">
                                     <div class="strategy-info-title">
                                         <el-tag class="strategy-tag" >{{i + 1}}</el-tag>
-                                        <a href="https://www.baidu.com/" target="_blank" style="color: #FF9D52">
+                                        <a v-bind="{ href: foodUrl + id  + '&f=' + item.id}" target="_blank" style="color: #FF9D52">
                                             {{item.strategyName}}
                                         </a>
                                     </div>
@@ -125,7 +125,7 @@
                                 </el-card>
                             </div>
                             <div class="strategy-foot">
-                                <a href="https://www.baidu.com/" target="_blank" style="color: #FF9D52">更多美食</a>
+                                <a v-bind="{ href: foodUrl + id  + '&f=1'}" target="_blank" style="color: #FF9D52">更多美食</a>
                             </div>
                         </div>
                     </el-col>
@@ -138,7 +138,7 @@
                                 <el-card class="box-card" v-for="(item, i) in hotelStrategy" v-if="i == 0">
                                     <div class="strategy-info-title" >
                                         <el-tag class="strategy-tag">{{i + 1}}</el-tag>
-                                        <a href="https://www.baidu.com/" target="_blank" style="color: #FF9D52">
+                                        <a v-bind="{ href: hotelUrl + id  + '&h=' + item.id}" target="_blank" style="color: #FF9D52">
                                             {{item.strategyName}}
                                         </a>
                                     </div>
@@ -152,7 +152,7 @@
                                 <el-card class="box-card2" v-for="(item, i) in hotelStrategy" v-if="i > 0 && i < 3">
                                     <div class="strategy-info-title" >
                                         <el-tag class="strategy-tag">{{i + 1}}</el-tag>
-                                        <a href="https://www.baidu.com/" target="_blank" style="color: #FF9D52">
+                                        <a v-bind="{ href: hotelUrl + id  + '&h=' + item.id}" target="_blank" style="color: #FF9D52">
                                             {{item.strategyName}}
                                         </a>
                                     </div>
@@ -162,7 +162,7 @@
                                 </el-card>
                             </div>
                             <div class="strategy-foot">
-                                <a href="https://www.baidu.com/" target="_blank" style="color: #FF9D52" >更多住宿</a>
+                                <a v-bind="{ href: hotelUrl + id  + '&h=1'}" target="_blank" style="color: #FF9D52" >更多住宿</a>
                             </div>
                         </div>
                     </el-col>
@@ -230,6 +230,8 @@
         name: 'spot',
         data() {
             return {
+                foodUrl:"http://" + location.hostname + ":" + location.port + "/foodStrategy?s=",
+                hotelUrl:"http://" + location.hostname + ":" + location.port + "/hotelStrategy?s=",
                 foodStrategy:[],
                 hotelStrategy:[],
                 spotType:'',
