@@ -98,7 +98,7 @@
                                 <i class="el-icon-dessert" style="padding-right: 10px"></i>必吃美食推荐
                             </div>
                             <div class="strategy-info">
-                                <el-card class="box-card" v-for="(item,i) in foodStrategy" v-if="i == 0">
+                                <el-card class="box-card" v-for="(item,i) in foodStrategy" v-if="i == 0" :key="i">
                                 <div class="strategy-info-title">
                                     <el-tag class="strategy-tag" >{{i + 1}}</el-tag>
                                     <a v-bind="{ href: foodUrl + id  + '&f=' + item.id}" target="_blank" style="color: #FF9D52">
@@ -112,7 +112,7 @@
                                     {{item.description}}
                                 </div>
                                 </el-card>
-                                <el-card class="box-card2" v-for="(item,i) in foodStrategy" v-if="i > 0 && i < 3">
+                                <el-card class="box-card2" v-for="(item,i) in foodStrategy" v-if="i > 0 && i < 3" :key="i">
                                     <div class="strategy-info-title">
                                         <el-tag class="strategy-tag" >{{i + 1}}</el-tag>
                                         <a v-bind="{ href: foodUrl + id  + '&f=' + item.id}" target="_blank" style="color: #FF9D52">
@@ -135,7 +135,7 @@
                                 <i class="el-icon-school" style="padding-right: 10px"></i>酒店住宿攻略
                             </div>
                             <div class="strategy-info">
-                                <el-card class="box-card" v-for="(item, i) in hotelStrategy" v-if="i == 0">
+                                <el-card class="box-card" v-for="(item, i) in hotelStrategy" v-if="i == 0" :key="i">
                                     <div class="strategy-info-title" >
                                         <el-tag class="strategy-tag">{{i + 1}}</el-tag>
                                         <a v-bind="{ href: hotelUrl + id  + '&h=' + item.id}" target="_blank" style="color: #FF9D52">
@@ -149,7 +149,7 @@
                                         {{item.description}}
                                     </div>
                                 </el-card>
-                                <el-card class="box-card2" v-for="(item, i) in hotelStrategy" v-if="i > 0 && i < 3">
+                                <el-card class="box-card2" v-for="(item, i) in hotelStrategy" v-if="i > 0 && i < 3" :key="i">
                                     <div class="strategy-info-title" >
                                         <el-tag class="strategy-tag">{{i + 1}}</el-tag>
                                         <a v-bind="{ href: hotelUrl + id  + '&h=' + item.id}" target="_blank" style="color: #FF9D52">
