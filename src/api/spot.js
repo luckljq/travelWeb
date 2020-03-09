@@ -1,5 +1,13 @@
 import request from '../utils/request';
 
+//根据id获取美食信息
+export const getFoodDetail = (id) => {
+    return request({
+        url: '/sev/foodDetail/' + id,
+        method: 'get'
+    })
+};
+
 //获取景点酒店列表接口
 export const getHotelList = (query) => {
     return request({
