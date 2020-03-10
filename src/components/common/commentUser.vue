@@ -2,6 +2,19 @@
     <div v-if="data != null">
         <div class="title">精彩评论</div>
         <el-button type="warning" size="medium" @click="showVisible" style="float: right">我要点评</el-button>
+        <div v-show="commentVisible">
+            <div class="cv">
+                <el-form :model="ruleForm" ref="ruleForm" label-width="80px" class="ms-content">
+                    <el-form-item label="内容">
+                        <el-input v-model="ruleForm.description" type="textarea" placeholder="请输入您的评论" size="large">
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="warning" @click="submitForm()" size="medium" style="float: right">提交</el-button>
+                    </el-form-item>
+                </el-form>
+            </div>
+        </div>
         <div class="center" v-for="(item,index) in data">
             <el-row :gutter="20">
                 <el-col :span="2">
@@ -93,10 +106,10 @@
 </template>
 <script>
     import {Message} from 'element-ui'
-    import {getCommentReply, addCommentReply} from '../../api/spot'
     export default {
         data() {
             return {
+                commentVisible:false,
                 i:null ,
                 showInput: false,
                 textarea: "",
@@ -106,16 +119,23 @@
                 isShow: true,
                 //回复参数
                 replyId:null,
-                userId:this.$store.getters.getUser.id
+                userId:this.$store.getters.getUser.id,
+                ruleForm: {
+                    description:''
+                }
             }
         },
         props: ['data', 'total', 'list'],
         methods: {
-            showVisible() {
+            submitForm() {
 
             },
+            showVisible() {
+                this.commentVisible = !this.commentVisible;
+            },
             commentReply(i) {
-
+                this.$parent.addReply(this.data[i].id, this.userId, this.replyId, this.textarea, i);
+                this.textarea = "";
             },
             showReplyInput(index, i) {
                 if(this.$store.getters.getUser.token != "" && this.$store.getters.getUser.token != null) {

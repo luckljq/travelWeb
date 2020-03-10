@@ -6,6 +6,15 @@ import request from '../utils/request';
  * @date 2020/3/9　10:34
  */
 
+//新增美食评论回复
+export const addFoodReply = (query) => {
+    return request({
+        url: '/sev/user/food/reply',
+        method: 'post',
+        data: query
+    })
+};
+
 //获取美食评论回复列表
 export const getFoodReply = (id) => {
     return request({

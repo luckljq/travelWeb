@@ -34,7 +34,7 @@
                     </div>
                 </el-col>
                 <el-col :span="17">
-                    <div class="foodList" v-if="foodDetail != {}">
+                    <div class="foodList" v-if="foodDetail != null">
                         <div class="foodList-title">
                             {{foodDetail.strategyName}}
                             <div class="header2-right">
@@ -45,7 +45,7 @@
                             </div>
                         </div>
                         <div class="foodList-info2">
-                            <el-image :src="foodDetail.imageUrl" style="width: 690px; height: 465px" ></el-image>
+                            <el-image :src="foodDetail.imageUrl" style="width: 690px; height: 465px"></el-image>
                             <div class="foodList-info-description">
                                {{foodDetail.description}}
                             </div>
@@ -70,8 +70,9 @@
     </div>
 </template>
 <script>
+    import {Message} from 'element-ui'
     import {getFoodList, getFoodDetail, getSpotDetail} from '../../api/spot'
-    import {foodUserFabulous, getFoodCount, getFoodUserStatus, getFoodComments, getFoodReply} from '../../api/sevApi'
+    import {foodUserFabulous, getFoodCount, getFoodUserStatus, getFoodComments, getFoodReply, addFoodReply} from '../../api/sevApi'
     import vCommentUser from '../common/commentUser.vue'
     export default {
         name: 'foodStrategy',
@@ -89,8 +90,8 @@
                 spotId:'',
                 spot:{},
                 foodId:'',
-                foodList:[],
-                foodDetail:{},
+                foodList: [],
+                foodDetail: null,
             }
         },
         created() {
@@ -104,6 +105,21 @@
             this.getComments();
         },
         methods: {
+            addReply(commentId, userId, replyId, description, i) {
+                addFoodReply({
+                    commentId: commentId,
+                    userId:userId,
+                    replyId:replyId,
+                    description: description
+                }).then(res => {
+                    if (this.data[i].replyList.length > 2){
+                        this.getReply(this.data[i].id);
+                    } else {
+                        this.getComments();
+                    }
+                    this.data[i].inputFlag = false;
+                })
+            },
             getReply(id) {
                 getFoodReply(id).then(res => {
                     this.list = res.data
