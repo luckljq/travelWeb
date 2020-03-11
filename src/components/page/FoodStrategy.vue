@@ -82,7 +82,7 @@
                 data: [],
                 total:0,
                 pageNumber:1,
-                foodTotal:20,
+                foodTotal:0,
                 s:0,
                 ss:'赞',
                 type:'',
@@ -201,7 +201,7 @@
             handleCurrentChange(val) {
                 let vm = this;
                 this.foodPageNumber = val;
-                console.log(this.foodPageNumber)
+                this.getFoods();
             },
             change(id) {
                 this.$router.push({
@@ -221,10 +221,11 @@
             getFoods() {
                 getFoodList({
                     id:this.spotId,
-                    pageNumber: this.pageNumber,
+                    pageNumber: this.foodPageNumber,
                     pageSize:10
                 }).then(res => {
                     this.foodList = res.data.list;
+                    this.foodTotal = res.data.total
                 })
             },
             getFood(id) {
