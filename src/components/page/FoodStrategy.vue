@@ -72,7 +72,7 @@
 <script>
     import {Message} from 'element-ui'
     import {getFoodList, getFoodDetail, getSpotDetail} from '../../api/spot'
-    import {foodUserFabulous, getFoodCount, getFoodUserStatus, getFoodComments, getFoodReply, addFoodReply} from '../../api/sevApi'
+    import {foodUserFabulous, getFoodCount, getFoodUserStatus, getFoodComments, getFoodReply, addFoodReply, addFoodComment} from '../../api/sevApi'
     import vCommentUser from '../common/commentUser.vue'
     export default {
         name: 'foodStrategy',
@@ -105,6 +105,18 @@
             this.getComments();
         },
         methods: {
+            addComment(description) {
+                addFoodComment({
+                    userId: this.$store.getters.getUser.id,
+                    foodId: this.foodId,
+                    description: description
+                }).then(res => {
+                    Message.success({
+                        message: "评论成功",
+                    });
+                    this.getComments();
+                })
+            },
             addReply(commentId, userId, replyId, description, i) {
                 addFoodReply({
                     commentId: commentId,

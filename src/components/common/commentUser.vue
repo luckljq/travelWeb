@@ -128,10 +128,17 @@
         props: ['data', 'total', 'list'],
         methods: {
             submitForm() {
-
+                this.$parent.addComment(this.ruleForm.description);
+                this.ruleForm.description = ""
             },
             showVisible() {
-                this.commentVisible = !this.commentVisible;
+                if(this.$store.getters.getUser.token != "" && this.$store.getters.getUser.token != null) {
+                    this.commentVisible = !this.commentVisible;
+                } else {
+                    Message.warning({
+                        message: "请您先登录，再进行操作",
+                    });
+                }
             },
             commentReply(i) {
                 this.$parent.addReply(this.data[i].id, this.userId, this.replyId, this.textarea, i);

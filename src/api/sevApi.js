@@ -5,6 +5,14 @@ import request from '../utils/request';
  * @author ljq
  * @date 2020/3/9　10:34
  */
+//新增美食评论
+export const addFoodComment = (query) => {
+    return request({
+        url: '/sev/user/food/comment',
+        method: 'post',
+        data: query
+    })
+};
 
 //新增美食评论回复
 export const addFoodReply = (query) => {
