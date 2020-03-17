@@ -2,7 +2,7 @@
     <div>
         <div class="center-bottom">
             <div>
-                <div class="center" >
+                <div class="center">
                     <el-row :gutter="60">
                         <el-col :span="7">
                             <div class="hotelList">
@@ -17,7 +17,8 @@
                                             {{item.strategyName}}
                                         </el-link>
                                         <div style="float: right">
-                                            <i class="el-icon-top" style="color:red; font-size: 16px; line-height: 25px" ></i>
+                                            <i class="el-icon-top"
+                                               style="color:red; font-size: 16px; line-height: 25px"></i>
                                             {{item.recommendTotal}}
                                         </div>
                                     </div>
@@ -36,20 +37,54 @@
                         <el-col :span="17">
                             <div class="hotelList" v-if="hotelDetail != null">
                                 <div class="hotelList-title">
-                                    酒店名字
+                                    {{hotelDetail.strategyName}}
                                     <div class="header2-right">
-                                        <el-button icon="el-icon-thumb" size="mini" :type="this.type" circle @click="zan()"></el-button>
+                                        <el-button icon="el-icon-thumb" size="mini" :type="this.type" circle
+                                                   @click="zan()"></el-button>
                                     </div>
                                     <div class="header2-right">
                                         <span style="margin-right: 10px; line-height: 29px;">{{s}}</span>
                                     </div>
                                 </div>
-                                <div class="hotelList-info2">
-                                    <el-image src="http://localhost/food/157888351452985f52adf86f64efdb75f8b4b55161204.jpeg" style="width: 690px; height: 465px"></el-image>
+                                <div class="hotelList-info2" v-if="hotelDetail.images">
+                                    <el-row :gutter="5">
+                                        <el-col :span="16">
+                                            <el-image :src="hotelDetail.images[0]"
+                                                      :preview-src-list="hotelDetail.images"
+                                                      style="width: 458px;height: 309px"/>
+                                        </el-col>
+                                        <el-col :span="8">
+                                            <el-row>
+                                                <el-image :src="hotelDetail.images[1]"
+                                                          :preview-src-list="hotelDetail.images"
+                                                          style="width: 226px;height: 153px"/>
+                                            </el-row>
+                                            <el-row>
+                                                <el-image :src="hotelDetail.images[2]"
+                                                          :preview-src-list="hotelDetail.images"
+                                                          style="width: 226px;height: 153px"/>
+                                            </el-row>
+                                        </el-col>
+                                    </el-row>
                                     <div class="hotelList-info-description">
-                                        酒店描述
+                                        {{hotelDetail.description}}
                                     </div>
-
+                                    <div class="hotelList-info-description">
+                                        <el-tag style="font-size: 15px">酒店电话</el-tag>
+                                        ：{{hotelDetail.phone}}
+                                    </div>
+                                    <div class="hotelList-info-description">
+                                        <el-tag style="font-size: 15px">参考价格</el-tag>
+                                        ：{{hotelDetail.price}}
+                                    </div>
+                                    <div class="hotelList-info-description">
+                                        <el-tag style="font-size: 15px">能否停车</el-tag>
+                                        ：{{hotelDetail.isPark}}
+                                    </div>
+                                    <div class="foodList-info-address">
+                                        <el-tag type="warning" style="font-size: 15px">酒店地址</el-tag>
+                                        ：{{hotelDetail.address}}
+                                    </div>
                                 </div>
                             </div>
                         </el-col>
@@ -62,36 +97,92 @@
 <script>
 
     import {Message} from 'element-ui'
-    import {getSpotDetail} from '../../api/spot'
+    import {getSpotDetail, getHotelList} from '../../api/spot'
+    import {getHotelDetails} from '../../api/sevApi'
+
     export default {
         name: 'hotelStrategy',
         data() {
             return {
-                list:[],
+                list: [],
                 data: [],
-                total:0,
-                pageNumber:1,
-                s:0,
-                type:'',
-                hotelPageNumber:1,
-                hotelTotal:20,
-                spotId:'',
-                spot:{},
-                hotelId:'',
+                total: 0,
+                pageNumber: 1,
+                s: 0,
+                type: '',
+                hotelPageNumber: 1,
+                hotelTotal: 20,
+                spotId: '',
+                spot: {},
+                hotelId: '',
                 hotelList: [],
-                hotelDetail:{},
+                hotelDetail: null,
             }
         },
         created() {
             this.spotId = this.$route.query.s;
             this.hotelId = this.$route.query.h;
             this.getSpot();
+            this.getHotels();
+            this.getHotel(this.hotelId);
         },
-        methods:{
+        methods: {
+            getComments() {
+
+            },
+            getLikeStatus() {
+                let id = this.$store.getters.getUser.id;
+                if (id != "") {
+
+                }
+            },
+            getCount() {
+
+            },
+            getHotel(id) {
+                getHotelDetails(id).then(res => {
+                    let hotel = res.data;
+                    if (hotel.isPark == 1) {
+                        hotel.isPark = '可以'
+                    } else {
+                        hotel.isPark = '不可以'
+                    }
+                    this.hotelDetail = hotel;
+                })
+            },
+            change(id) {
+                this.$router.push({
+                    path: '/hotelStrategy?s=' + this.spotId + '&h=' + id,
+                });
+                this.hotelId = id;
+                this.getHotel(id);
+                this.getCount();
+                this.getLikeStatus();
+                this.getComments();
+            },
+            getHotels() {
+                getHotelList({
+                    id: this.spotId,
+                    pageNumber: this.HotelPageNumber,
+                    pageSize: 10
+                }).then(res => {
+                    let list = null;
+                    if (res.data.list != null) {
+                        list = res.data.list;
+                        list.forEach(i => {
+                            if (i.strategyName.length > 8) {
+                                i.strategyName = i.strategyName.substring(0, 7) + "...";
+                            }
+                        })
+                    }
+                    this.hotelList = list;
+                    this.hotelTotal = res.data.hotel;
+                })
+            },
             handleCurrentChange(val) {
                 let vm = this;
                 this.hotelPageNumber = val;
-                console.log(this.hotelPageNumber)
+                this.getHotels();
             },
             getSpot() {
                 getSpotDetail(this.spotId).then(res => {
@@ -99,15 +190,15 @@
                 })
             },
             zan() {
-                if(this.$store.getters.getUser.token != "" && this.$store.getters.getUser.token != null){
+                if (this.$store.getters.getUser.token != "" && this.$store.getters.getUser.token != null) {
                     let id = this.$store.getters.getUser.id;
-                    if (this.type == ''){
+                    if (this.type == '') {
 
                         this.s = this.s + 1;
                         this.type = "danger"
                     } else {
 
-                        this.s = this.s-1;
+                        this.s = this.s - 1;
                         this.type = ""
                     }
                 } else {
@@ -120,52 +211,69 @@
     }
 </script>
 <style>
+    .foodList-info-address {
+        position: absolute;
+        bottom: 10px;
+        color: #e6a23c;
+    }
     .comment {
         margin-top: 30px;
     }
+
     .page {
         text-align: center;
     }
-    .aa{
+
+    .aa {
         font-size: 17px;
         margin-left: 8px;
         padding-bottom: 4px;
     }
+
     .header2-right {
         float: right;
     }
+
     .strategy-tag {
         line-height: 26px;
-        background-color:#ff9d00;
+        background-color: #ff9d00;
         color: white;
         font-size: 15px;
     }
+
     .hotelList-list {
         padding: 15px 0;
         border-bottom: 1px solid #eee;
     }
+
     .hotelList-info-description {
         padding-top: 10px;
     }
+
     .hotelList-info {
         min-height: 594px;
     }
+
     .hotelList-info2 {
         min-height: 626px;
     }
+
     .hotelList-title {
         color: #ff9d00;
         font-size: 20px;
         border-bottom: 1px solid #eee;
         padding-bottom: 10px;
     }
-    .hotelList{
+
+    .hotelList {
         padding-top: 40px;
     }
+
     .center {
-        margin:0 auto;
+        margin: 0 auto;
         width: 1000px;
     }
+
     .center-bottom {
         border-bottom: 1px solid #eee;
     }

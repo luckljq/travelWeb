@@ -58,6 +58,7 @@
                         <span style="color: #FF9D52">{{spot.useTime}}</span>
                     </el-col>
                     <el-col :span="8">
+                        <el-divider direction="vertical"></el-divider>
                         <span>网址：</span>
                         <span style="color: #FF9D52">{{spot.scenicSpotUrl}}</span>
                     </el-col>

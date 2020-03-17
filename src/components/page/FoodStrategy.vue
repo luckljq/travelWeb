@@ -205,7 +205,7 @@
             },
             change(id) {
                 this.$router.push({
-                    path: '/foodStrategy?s=1&f=' + id,
+                    path: '/foodStrategy?s=' + this.spotId + '&f=' + id,
                 });
                 this.foodId = id;
                 this.getFood(id);
