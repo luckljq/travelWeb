@@ -19,10 +19,10 @@
                             <i class="el-icon-question"></i>
                             <span style="font-size: 15px">我的问答</span>
                         </el-menu-item>
-                        <el-menu-item index="/comments">
-                            <i class="el-icon-s-comment"></i>
-                            <span style="font-size: 15px">我的评论</span>
-                        </el-menu-item>
+<!--                        <el-menu-item index="/comments">-->
+<!--                            <i class="el-icon-s-comment"></i>-->
+<!--                            <span style="font-size: 15px">我的评论</span>-->
+<!--                        </el-menu-item>-->
                         <el-menu-item index="/news">
                             <i class="el-icon-info"></i>
                             <span style="font-size: 15px">我的消息</span>

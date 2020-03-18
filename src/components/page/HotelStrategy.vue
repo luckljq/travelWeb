@@ -92,13 +92,22 @@
                 </div>
             </div>
         </div>
+        <div style="background-color: #fafafa">
+            <div class="center">
+                <div class="comment">
+                    <vCommentUser :data="data" :total="this.total" :list="list" v-on:getPageNumber="getPageNumber"></vCommentUser>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 <script>
 
     import {Message} from 'element-ui'
     import {getSpotDetail, getHotelList} from '../../api/spot'
-    import {getHotelDetails} from '../../api/sevApi'
+    import {getHotelDetails, hotelUserFabulous, getHotelCount, getHotelUserStatus,
+        addHotelComment, addHotelReply, getHotelReply, getHotelComments} from '../../api/sevApi'
+    import vCommentUser from '../common/commentUser.vue'
 
     export default {
         name: 'hotelStrategy',
@@ -111,7 +120,7 @@
                 s: 0,
                 type: '',
                 hotelPageNumber: 1,
-                hotelTotal: 20,
+                hotelTotal: 0,
                 spotId: '',
                 spot: {},
                 hotelId: '',
@@ -125,19 +134,80 @@
             this.getSpot();
             this.getHotels();
             this.getHotel(this.hotelId);
+            this.getCount();
+            this.getLikeStatus();
+            this.getComments();
+        },
+        components:{
+            vCommentUser
         },
         methods: {
+            addComment(description) {
+                addHotelComment({
+                    userId: this.$store.getters.getUser.id,
+                    hotelId: this.hotelId,
+                    description: description
+                }).then(res => {
+                    Message.success({
+                        message: "评论成功",
+                    });
+                    this.getComments();
+                })
+            },
+            addReply(commentId, userId, replyId, description, i) {
+                addHotelReply({
+                    commentId: commentId,
+                    userId:userId,
+                    replyId:replyId,
+                    description: description
+                }).then(res => {
+                    if (this.data[i].replyList.length > 2){
+                        this.getReply(this.data[i].id);
+                    } else {
+                        this.getComments();
+                    }
+                    this.data[i].inputFlag = false;
+                })
+            },
+            getReply(id) {
+                getHotelReply(id).then(res => {
+                    this.list = res.data
+                })
+            },
+            //翻页
+            getPageNumber(pageNumber){
+                this.pageNumber = pageNumber;
+                this.getComments();
+            },
             getComments() {
-
+                getHotelComments({
+                    id: this.hotelId,
+                    pageNumber: this.pageNumber,
+                    pageSize: 5
+                }).then(res => {
+                    this.data = res.data.list;
+                    this.total = res.data.total
+                })
             },
             getLikeStatus() {
                 let id = this.$store.getters.getUser.id;
                 if (id != "") {
-
+                    getHotelUserStatus({
+                        hotelId: this.hotelId,
+                        userId: id
+                    }).then(res => {
+                        if (res.data == 1) {
+                            this.type = "danger"
+                        } else {
+                            this.type = ""
+                        }
+                    })
                 }
             },
             getCount() {
-
+                getHotelCount(this.hotelId).then(res => {
+                    this.s = res.data;
+                })
             },
             getHotel(id) {
                 getHotelDetails(id).then(res => {
@@ -176,7 +246,7 @@
                         })
                     }
                     this.hotelList = list;
-                    this.hotelTotal = res.data.hotel;
+                    this.hotelTotal = res.data.total;
                 })
             },
             handleCurrentChange(val) {
@@ -193,11 +263,19 @@
                 if (this.$store.getters.getUser.token != "" && this.$store.getters.getUser.token != null) {
                     let id = this.$store.getters.getUser.id;
                     if (this.type == '') {
-
+                        hotelUserFabulous({
+                            hotelId: this.hotelId,
+                            userId: id,
+                            value: 1
+                        });
                         this.s = this.s + 1;
                         this.type = "danger"
                     } else {
-
+                        hotelUserFabulous({
+                            hotelId: this.hotelId,
+                            userId: id,
+                            value: 0
+                        });
                         this.s = this.s - 1;
                         this.type = ""
                     }

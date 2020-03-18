@@ -10,23 +10,23 @@
                         <el-card>
                             <div  v-if="item.orderType == 1" >
                                 <el-tag type="success" style="float: right">景点评论</el-tag>
-                                <h4 style="color: #FF9D52">{{item.senderName}}回复您： </h4>
+                                <h4 style="color: #FF9D52">{{item.senderName}}： </h4>
                             </div>
                             <div  v-if="item.orderType == 2" >
                                 <el-tag type="success" style="float: right">美食评论</el-tag>
-                                <h4 style="color: #FF9D52">{{item.senderName}}回复您： </h4>
+                                <h4 style="color: #FF9D52">{{item.senderName}}： </h4>
                             </div>
                             <div  v-if="item.orderType == 3" >
                                 <el-tag type="success" style="float: right">酒店评论</el-tag>
-                                <h4 style="color: #FF9D52">{{item.senderName}}回复您： </h4>
+                                <h4 style="color: #FF9D52">{{item.senderName}}： </h4>
                             </div>
                             <div  v-if="item.orderType == 4" >
                                 <el-tag type="warning" style="float: right">游记回复</el-tag>
-                                <h4 style="color: #FF9D52">{{item.senderName}}回复您： </h4>
+                                <h4 style="color: #FF9D52">{{item.senderName}}： </h4>
                             </div>
                             <div  v-if="item.orderType == 5" >
                                 <el-tag type="info" style="float: right">问答回复</el-tag>
-                                <h4 style="color: #FF9D52">{{item.senderName}}回复您： </h4>
+                                <h4 style="color: #FF9D52">{{item.senderName}}： </h4>
                             </div>
 <!--                            <h4 v-if="item.type == 2" style="color: #FF9D52">{{item.name}}回复您： </h4>-->
 <!--                            <h4 v-if="item.type == 3" style="color: #FF9D52">{{item.name}}回答了您： </h4>-->

@@ -6,6 +6,65 @@ import request from '../utils/request';
  * @date 2020/3/9　10:34
  */
 
+//新增酒店评论
+export const addHotelComment = (query) => {
+    return request({
+        url: '/sev/user/hotel/comment',
+        method: 'post',
+        data: query
+    })
+};
+
+//新增酒店评论回复
+export const addHotelReply = (query) => {
+    return request({
+        url: '/sev/user/hotel/reply',
+        method: 'post',
+        data: query
+    })
+};
+
+//获取酒店评论回复列表
+export const getHotelReply = (id) => {
+    return request({
+        url: '/sev/hotel/reply/' + id,
+        method: 'get'
+    })
+};
+
+//根据id获取酒店评论列表
+export const getHotelComments = (query) => {
+    return request({
+        url:'/sev/hotel/comments',
+        method: 'get',
+        params: query
+    })
+};
+
+//获取用户是否给酒店点赞
+export const getHotelUserStatus = (query) => {
+    return request({
+        url: '/sev/user/hotel/status',
+        method: 'get',
+        params: query
+    })
+};
+//获取酒店点赞总数
+export const getHotelCount = (id) => {
+    return request({
+        url: '/sev/hotel/count/' + id,
+        method: 'get'
+    })
+};
+//给酒店点赞
+export const hotelUserFabulous = (query) => {
+    return request({
+        url: '/sev/user/hotel/fabulous',
+        method: 'get',
+        params: query
+    })
+};
+
 //获取酒店详情
 export const getHotelDetails = (id) => {
     return request({
