@@ -24,7 +24,7 @@
         </div>
         <div class="center-image">
             <div class="center" v-if="spot.urls" @click="refresh" >
-                <a href="https://www.baidu.com/" target="_blank" >
+                <a :href="imagesUrl + this.id" target="_blank" >
                     <el-row :gutter="5">
                         <el-col :span="16">
                             <el-image :src=" 'http://localhost' + spot.urls[0]"
@@ -231,6 +231,7 @@
         name: 'spot',
         data() {
             return {
+                imagesUrl:"http://" + location.hostname + ":" + location.port + "/spotImages?s=",
                 foodUrl:"http://" + location.hostname + ":" + location.port + "/foodStrategy?s=",
                 hotelUrl:"http://" + location.hostname + ":" + location.port + "/hotelStrategy?s=",
                 foodStrategy:[],

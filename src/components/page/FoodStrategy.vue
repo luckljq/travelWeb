@@ -45,7 +45,7 @@
                             </div>
                         </div>
                         <div class="foodList-info2">
-                            <el-image :src="foodDetail.imageUrl" style="width: 690px; height: 465px"></el-image>
+                            <el-image :src="foodDetail.imageUrl" :preview-src-list="[foodDetail.imageUrl]" style="width: 690px; height: 465px"></el-image>
                             <div class="foodList-info-description">
                                {{foodDetail.description}}
                             </div>

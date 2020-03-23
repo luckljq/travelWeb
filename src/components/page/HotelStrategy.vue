@@ -325,7 +325,7 @@
     }
 
     .hotelList-info-description {
-        padding-top: 10px;
+        padding-top: 15px;
     }
 
     .hotelList-info {

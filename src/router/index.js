@@ -51,6 +51,11 @@ export default new Router({
                     meta: { title: '景点' }
                 },
                 {
+                    path: '/spotImages',
+                    component: resolve => require(['../components/page/SpotImages.vue'], resolve),
+                    meta: { title: '景点图片' }
+                },
+                {
                     path: '/foodStrategy',
                     component: resolve => require(['../components/page/FoodStrategy.vue'], resolve),
                     meta: { title: '美食攻略' }

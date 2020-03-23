@@ -1,5 +1,14 @@
 import request from '../utils/request';
 
+//获取景点图片列表
+export const getImages = (id, query) => {
+    return request({
+        url:'/sev/spot/images/' + id,
+        method: 'get',
+        params: query
+    })
+};
+
 //根据id获取美食信息
 export const getFoodDetail = (id) => {
     return request({
