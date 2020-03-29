@@ -1,5 +1,13 @@
 import request from '../utils/request';
 
+export const getNames = (query) => {
+    return request({
+        url: '/spot/spotName',
+        method: 'get',
+        params: query
+    })
+};
+
 //获取景点图片列表
 export const getImages = (id, query) => {
     return request({

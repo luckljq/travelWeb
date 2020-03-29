@@ -18,7 +18,7 @@
                         <el-menu-item index="dashboard" style="font-size: 18px">首页</el-menu-item>
                         <el-menu-item index="destination" style="font-size: 18px">目的地</el-menu-item>
                         <el-menu-item index="rankingList" style="font-size: 18px">排行榜</el-menu-item>
-                        <el-menu-item index="diary" style="font-size: 18px">旅行日记</el-menu-item>
+                        <el-menu-item index="diary" style="font-size: 18px">旅行游记</el-menu-item>
                         <el-menu-item index="questions" style="font-size: 18px">问答</el-menu-item>
 <!--                        <el-menu-item index="info" style="font-size: 18px" v-if="this.$store.getters.getUser.token != ''">个人中心</el-menu-item>-->
                     </el-menu>

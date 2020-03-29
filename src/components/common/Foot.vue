@@ -17,7 +17,6 @@
 </script>
 <style scoped>
     .foot {
-        margin-top: 100px;
         background-color: #3C3C3C;
         position: relative;
         box-sizing: border-box;

@@ -36,6 +36,11 @@ export default new Router({
                     meta: { title: '旅行日记' }
                 },
                 {
+                    path: '/write',
+                    component: resolve => require(['../components/page/WriteDiary.vue'], resolve),
+                    meta: { title: '旅行日记' }
+                },
+                {
                     path: '/questions',
                     component: resolve => require(['../components/page/Questions.vue'], resolve),
                     meta: { title: '问答' }
