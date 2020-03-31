@@ -8,7 +8,7 @@ export default new Router({
     routes: [
         {
             path: '/',
-            redirect: '/dashboard'
+            redirect: '/destination'
         },
         {
             path: '/',
@@ -36,9 +36,14 @@ export default new Router({
                     meta: { title: '旅行日记' }
                 },
                 {
+                    path: '/diaryDetail',
+                    component: resolve => require(['../components/page/DiaryDetail.vue'], resolve),
+                    meta: { title: '游记详情' }
+                },
+                {
                     path: '/write',
                     component: resolve => require(['../components/page/WriteDiary.vue'], resolve),
-                    meta: { title: '旅行日记' }
+                    meta: { title: '写游记' }
                 },
                 {
                     path: '/questions',

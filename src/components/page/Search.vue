@@ -82,7 +82,7 @@
     }
     .container2 {
         width: 1300px;
-        margin-left: 300px;
+        margin:auto;
         padding: 30px;
     }
     .search {

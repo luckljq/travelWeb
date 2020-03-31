@@ -15,7 +15,7 @@
                              text-color="#EEEEEE"
                              active-text-color="#EEBE00"
                              @select="handleSelect" router>
-                        <el-menu-item index="dashboard" style="font-size: 18px">首页</el-menu-item>
+<!--                        <el-menu-item index="dashboard" style="font-size: 18px">首页</el-menu-item>-->
                         <el-menu-item index="destination" style="font-size: 18px">目的地</el-menu-item>
                         <el-menu-item index="rankingList" style="font-size: 18px">排行榜</el-menu-item>
                         <el-menu-item index="diary" style="font-size: 18px">旅行游记</el-menu-item>
@@ -213,6 +213,7 @@
                 }
             };
             return {
+                timeout2:null,
                 showCount: false,
                 messageCount:'',
                 noticeCount:'',
@@ -473,8 +474,12 @@
             handleCommand(command) {
                 if (command === 'loginout') {
                     sessionStorage.clear();
-                    // this.isLogin = false;
-                    window.location.reload()
+                    this.$router.push('/destination');
+                    clearTimeout(this.timeout);
+                    this.timeout2 = setTimeout(() => {
+                        window.location.reload();
+                    }, 2000 );
+
                 }
                 if (command === 'user') {
                     this.$router.push('info')

@@ -132,6 +132,7 @@
         display: inline-block;
     }
     .header-box {
+        position: relative;
         background: url("../../assets/img/header.jpg") no-repeat;
         background-size: 100% 100%;
         width: 100%;
@@ -149,7 +150,7 @@
         left:50%;
         top:50%;
         width:350px;
-        margin:-190px 0 0 -175px;
+        margin:-100px 0 0 -175px;
         border-radius: 5px;
         background: rgba(128,128,128, 0.2);
         overflow: hidden;

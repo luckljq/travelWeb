@@ -21,7 +21,7 @@
                             <div class="info-title">
                                 <el-input v-model="title" placeholder="请在这里输入标题"></el-input>
                             </div>
-                            <div class="info-info">
+                            <div class="info-description">
                                 <el-input
                                         type="textarea"
                                         :autosize="{ minRows: 25, maxRows: 60}"
@@ -166,7 +166,7 @@
         display: inline;
         padding-left: 50px;
     }
-    .info-info {
+    .info-description {
         padding-bottom: 20px;
     }
     .info-title {

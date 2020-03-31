@@ -172,6 +172,7 @@
         </div>
         <div style="background-color: #fafafa">
             <div class="center">
+                <a id="day" href="#day" style="color:red"></a>
                 <div class="comment">
                     <vComment :data="data" :total="this.total" v-on:getPageNumber="getPageNumber"></vComment>
                 </div>
@@ -404,6 +405,7 @@
             //翻页
             getPageNumber(pageNumber){
                 this.pageNumber = pageNumber;
+                document.querySelector("#day").scrollIntoView(true);
                 this.getComment();
             },
             getCount() {
