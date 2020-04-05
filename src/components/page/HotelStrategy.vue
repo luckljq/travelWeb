@@ -93,6 +93,7 @@
             </div>
         </div>
         <div style="background-color: #fafafa">
+            <a id="day" href="#day" style="color:red"></a>
             <div class="center">
                 <div class="comment">
                     <vCommentUser :data="data" :total="this.total" :list="list" v-on:getPageNumber="getPageNumber"></vCommentUser>
@@ -178,6 +179,7 @@
             getPageNumber(pageNumber){
                 this.pageNumber = pageNumber;
                 this.getComments();
+                document.querySelector("#day").scrollIntoView(true);
             },
             getComments() {
                 getHotelComments({

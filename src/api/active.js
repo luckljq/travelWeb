@@ -1,5 +1,40 @@
 import request from '../utils/request';
 
+//新增游记评论
+export const addDiaryComment = (query) => {
+    return request({
+        url: '/active/user/diary/comment',
+        method: 'post',
+        data: query
+    })
+};
+
+//新增游记评论回复
+export const addDiaryReply = (query) => {
+    return request({
+        url: '/active/user/diary/reply',
+        method: 'post',
+        data: query
+    })
+};
+
+//获取游记评论回复列表
+export const getDiaryReply = (id) => {
+    return request({
+        url: '/active/diary/reply/' + id,
+        method: 'get'
+    })
+};
+
+//根据id获取游记评论列表
+export const getDiaryComments = (query) => {
+    return request({
+        url:'/active/diary/comments',
+        method: 'get',
+        params: query
+    })
+};
+
 //游记被点赞总数
 export const getCount = (id) =>{
     return request({

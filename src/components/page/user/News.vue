@@ -21,11 +21,11 @@
                                 <h4 style="color: #FF9D52">{{item.senderName}}： </h4>
                             </div>
                             <div  v-if="item.orderType == 4" >
-                                <el-tag type="warning" style="float: right">游记回复</el-tag>
+                                <el-tag type="warning" style="float: right">游记消息</el-tag>
                                 <h4 style="color: #FF9D52">{{item.senderName}}： </h4>
                             </div>
                             <div  v-if="item.orderType == 5" >
-                                <el-tag type="info" style="float: right">问答回复</el-tag>
+                                <el-tag type="info" style="float: right">问答消息</el-tag>
                                 <h4 style="color: #FF9D52">{{item.senderName}}： </h4>
                             </div>
 <!--                            <h4 v-if="item.type == 2" style="color: #FF9D52">{{item.name}}回复您： </h4>-->

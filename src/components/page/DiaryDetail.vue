@@ -50,15 +50,29 @@
                 {{diaryDetail.description}}
             </div>
         </div>
+
+        <div style="background-color: #fafafa; border-top: 1px solid rgb(221, 221, 221)" >
+            <a id="day" href="#day" style="color:red"></a>
+            <div class="center">
+                <div class="comment">
+                    <vCommentUser :data="data" :total="this.total" :list="list" v-on:getPageNumber="getPageNumber"></vCommentUser>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 <script>
-    import {getDiary, getStatus, getCount, fabulous} from '../../api/active'
+    import {getDiary, getStatus, getCount, fabulous,addDiaryComment,addDiaryReply, getDiaryComments, getDiaryReply} from '../../api/active'
     import {Message} from 'element-ui'
+    import vCommentUser from '../common/commentUser'
     export default {
         name: 'diaryDetail',
         data() {
             return {
+                list:[],
+                data: [],
+                total:0,
+                pageNumber:1,
                 diaryDetail:{},
                 imageList:[],
                 type: '',
@@ -66,13 +80,65 @@
                 diaryId: null,
             }
         },
+        components:{
+            vCommentUser
+        },
         created() {
             this.diaryId = this.$route.query.d;
             this.getData();
             this.getLikeStatus();
             this.getCount();
+            this.getComments();
         },
         methods: {
+            addComment(description) {
+                addDiaryComment({
+                    userId: this.$store.getters.getUser.id,
+                    diaryId: this.diaryId,
+                    description: description
+                }).then(res => {
+                    Message.success({
+                        message: "评论成功",
+                    });
+                    this.getComments();
+                })
+            },
+            addReply(commentId, userId, replyId, description, i) {
+                addDiaryReply({
+                    commentId: commentId,
+                    userId:userId,
+                    replyId:replyId,
+                    description: description
+                }).then(res => {
+                    if (this.data[i].replyList.length > 2){
+                        this.getReply(this.data[i].id);
+                    } else {
+                        this.getComments();
+                    }
+                    this.data[i].inputFlag = false;
+                })
+            },
+            getReply(id) {
+                getDiaryReply(id).then(res => {
+                    this.list = res.data
+                })
+            },
+            getComments() {
+                getDiaryComments({
+                    id: this.diaryId,
+                    pageNumber: this.pageNumber,
+                    pageSize: 5
+                }).then(res => {
+                    this.data = res.data.list;
+                    this.total = res.data.total
+                })
+            },
+            //翻页
+            getPageNumber(pageNumber){
+                this.pageNumber = pageNumber;
+                this.getComments();
+                document.querySelector("#day").scrollIntoView(true);
+            },
             getLikeStatus() {
                 let id = this.$store.getters.getUser.id;
                 if (id != "") {
@@ -129,6 +195,9 @@
     }
 </script>
 <style scoped>
+    .comment {
+        margin-top: 30px;
+    }
     .info {
         line-height: 1.5;
         padding-left: 10px;
