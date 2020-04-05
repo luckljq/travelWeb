@@ -63,11 +63,64 @@
                         </div>
                     </el-tab-pane>
                     <el-tab-pane label="最新游记" name="second">
-                        最新游记
+                        <div class="title">
+                            <el-tag size="30">筛选</el-tag>
+                            <el-autocomplete
+                                    style="padding-left: 20px"
+                                    v-model="destination"
+                                    :fetch-suggestions="querySearchAsync"
+                                    placeholder="请在这里输入目的地"
+                                    @select="handleSelect"
+                            ></el-autocomplete>
+                            <el-button type="warning"
+                                       size="medium"
+                                       style="float: right"
+                                       @click="goWrite">去写游记
+                            </el-button>
+                        </div>
+                        <div style="min-height: 500px">
+                            <a v-for="item in diaryList2" v-bind="{ href: diaryUrl + item.id}" target="_blank"
+                               style="color: #FF9D52">
+                                <div class="info-list">
+                                    <el-row :gutter="50">
+                                        <el-col :span="8">
+                                            <el-image style="height: 200px;"
+                                                      :src="item.image"></el-image>
+                                        </el-col>
+                                        <el-col :span="16">
+                                            <div class="info-title">
+                                                {{item.title}}
+                                            </div>
+                                            <div class="info-info">
+                                                {{item.description}}
+                                            </div>
+                                            <div class="info-last">
+
+                                                <i class="el-icon-location-information" style="color:#ff9d00;"></i>
+                                                {{item.destination}}，by&nbsp;&nbsp;
+                                                <span style="color:#ff9d00;">{{item.userName}}</span>
+                                                &nbsp;&nbsp; {{item.createTime}}
+                                                <div style="float: right; color: #ff9d00;font-size: 19px">
+                                                    {{item.recommendTotal}}
+                                                    <i class="el-icon-thumb"></i>
+                                                </div>
+                                            </div>
+                                        </el-col>
+                                    </el-row>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="page">
+                            <el-pagination
+                                    :current-page="pageNumber2"
+                                    @current-change="handleCurrentChange2"
+                                    layout="total, prev, pager, next"
+                                    :page-size="pageSize2"
+                                    :total="total2">
+                            </el-pagination>
+                        </div>
                     </el-tab-pane>
-
                 </el-tabs>
-
             </div>
         </div>
     </div>
@@ -81,6 +134,7 @@
         data() {
             return {
                 diaryList: [],
+                diaryList2: [],
                 diaryUrl: "http://" + location.hostname + ":" + location.port + "/diaryDetail?d=",
                 destination: '',
                 spotId: null,
@@ -90,7 +144,11 @@
                 //分页
                 pageNumber: 1,
                 pageSize: 5,
-                total: 0
+                total: 0,
+                //分页
+                pageNumber2: 1,
+                pageSize2: 5,
+                total2: 0
             }
         },
         created() {
@@ -98,9 +156,14 @@
         },
         methods: {
             handleCurrentChange(val) {
-                let vm = this;
                 this.pageNumber = val;
                 this.getDiary();
+                document.querySelector("#day").scrollIntoView(true);
+            },
+            handleCurrentChange2(val) {
+                console.log(val);
+                this.pageNumber2 = val;
+                this.getDiary2();
                 document.querySelector("#day").scrollIntoView(true);
             },
             goWrite() {
@@ -114,6 +177,7 @@
             },
             getDiary() {
                 getDiaries({
+                    type:0,
                     spotId: this.spotId,
                     pageNumber: this.pageNumber,
                     pageSize: this.pageSize
@@ -122,8 +186,25 @@
                     this.total = res.data.total;
                 })
             },
+            getDiary2() {
+                getDiaries({
+                    type: 1,
+                    spotId: this.spotId,
+                    pageNumber: this.pageNumber2,
+                    pageSize: this.pageSize2
+                }).then(res => {
+                    this.diaryList2 = res.data.list;
+                    this.total2 = res.data.total;
+                })
+            },
             handleClick(tab, event) {
-                console.log(tab, event);
+                if (tab.name == 'second') {
+                    this.pageNumber2 = 1;
+                    this.getDiary2()
+                } else {
+                    this.pageNumber = 1;
+                    this.getDiary()
+                }
             },
             querySearchAsync(queryString, cb) {
                 var results;
