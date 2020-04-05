@@ -27,35 +27,6 @@ const i18n = new VueI18n({
     messages
 });
 
-// 使用钩子函数对路由进行权限跳转
-// router.beforeEach((to, from, next) => {
-//     const state = sessionStorage.getItem('state');
-//     console.log(state);
-//     console.log(sessionStorage.getItem('UserState'));
-//     if (to.path === '/login') {
-//         // next('/login');
-//     }
-//     else if (state === null) {
-//         next('/login');
-//     }
-//     next();
-// });
-
-// router.beforeEach((to, from, next) => {
-//     const state = sessionStorage.getItem('state');
-//     console.log(state);
-//     console.log(sessionStorage.getItem('UserState'));
-//     if (to.path === '/login') {
-//         // next('/login');
-//         if (state !== null) {
-//             next('slides')
-//         }
-//     }
-//     else if (state === null) {
-//         next('/login');
-//     }
-//     next();
-// });
 
 new Vue({
     router,

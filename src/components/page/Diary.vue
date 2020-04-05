@@ -76,7 +76,6 @@
     import {Message} from 'element-ui'
     import {getNames} from '../../api/spot'
     import {getDiaries} from '../../api/active'
-
     export default {
         name: 'diary',
         data() {

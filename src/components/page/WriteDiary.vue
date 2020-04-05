@@ -13,7 +13,6 @@
                                 @select="handleSelect"
                         ></el-autocomplete>
                     </div>
-                    <el-divider></el-divider>
                 </div>
                 <div class="info">
                     <el-row :gutter="50">
