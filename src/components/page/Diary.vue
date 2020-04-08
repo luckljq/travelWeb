@@ -3,7 +3,7 @@
         <div class="center">
             <div style="padding: 40px 0">
                 <a id="day" href="#day" style="color:red"></a>
-                <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tabs v-model="activeName" @tab-click="handleClick" type="border-card">
                     <el-tab-pane label="热门游记" name="first">
                         <div class="title">
                             <el-tag size="30">筛选</el-tag>
@@ -234,7 +234,7 @@
 
     .info-last {
         color: #666;
-        width: 650px;
+        width: 620px;
         position: absolute;
         bottom: 0;
     }
