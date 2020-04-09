@@ -5,22 +5,13 @@
                 <a id="day" href="#day" style="color:red"></a>
                 <el-card class="box-card">
                     <div slot="header" class="clearfix">
-                        <span>问答中心</span>
+                        <span style="font-size: 25px; color:#FF9D52 ">问答中心</span>
                     </div>
                     <div style="min-height: 500px">
                         <div class="title">
-                            <el-tag size="30">筛选</el-tag>
-                            <el-autocomplete
-                                    style="padding-left: 20px"
-                                    v-model="destination"
-                                    :fetch-suggestions="querySearchAsync"
-                                    placeholder="请在这里输入目的地"
-                                    @select="handleSelect"
-                            ></el-autocomplete>
-                            <el-input  v-model="description" style="width: 200px; padding-left: 20px; padding-right: 20px"
-                                       placeholder="问问提前，先搜一搜"></el-input>
+                            <el-input v-model="description" style="width: 200px; padding-right: 20px"
+                                      placeholder="问问提前，先搜一搜"></el-input>
                             <el-button type="primary"
-
                                        @click="getList()">搜索
                             </el-button>
                             <el-button type="warning"
@@ -29,6 +20,7 @@
                                        @click="addQuestion()">我要提问
                             </el-button>
                         </div>
+
                         <a v-for="item in questionList" v-bind="{ href: questionUrl + item.id}" target="_blank"
                            style="color: #FF9D52">
                             <div class="info-list">
@@ -44,15 +36,16 @@
                                     </el-col>
                                     <el-col :span="19">
                                         <div class="question">
-                                            <el-button  plain type="primary" style="font-size: 18px" circle>问:</el-button>
+                                            <el-button plain type="primary" style="font-size: 18px" circle>问:
+                                            </el-button>
                                             &nbsp;&nbsp;{{item.description}}
                                         </div>
                                         <div class="answer" v-if="item.answer != null">
-                                            <el-button  plain type="danger"  style="font-size: 18px" circle>答:</el-button>
+                                            <el-button plain type="danger" style="font-size: 18px" circle>答:</el-button>
                                             &nbsp;&nbsp;{{item.answer}}
                                         </div>
                                         <div class="answer" v-else>
-                                            <el-button  plain type="danger"  style="font-size: 18px" circle>答:</el-button>
+                                            <el-button plain type="danger" style="font-size: 18px" circle>答:</el-button>
                                             &nbsp;&nbsp; 暂无回答
                                         </div>
                                         <div class="time">
@@ -75,32 +68,83 @@
                 </el-card>
             </div>
         </div>
+
+        <!--提问弹出框-->
+        <el-dialog
+                center
+                title="我要提问"
+                :lock-scroll="false"
+                :visible.sync="questionVisible"
+                width="35%"
+        >
+            <el-autocomplete
+                    v-model="destination"
+                    :fetch-suggestions="querySearchAsync"
+                    placeholder="请在这里输入目的地"
+                    @select="handleSelect"
+            ></el-autocomplete>
+            <div class="info-description">
+                <el-input
+                        type="textarea"
+                        :autosize="{ minRows: 3, maxRows: 6}"
+                        placeholder="请在这里输入问题"
+                        v-model="questionDescription">
+                </el-input>
+            </div>
+            <div style="padding-top: 10px; padding-bottom: 10px">
+                <el-button type="primary" style="float: right" @click="add">提问</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 <script>
 
     import {Message} from 'element-ui'
     import {getNames} from '../../api/spot'
-    import {listQuestion} from '../../api/active'
+    import {listQuestion, addQuestions} from '../../api/active'
+
     export default {
         name: 'questions',
         data() {
             return {
+                questionDescription: '',
+                questionVisible: false,
                 questionUrl: "http://" + location.hostname + ":" + location.port + "/questionDetails?q=",
-                questionList:[],
-                spotId:null,
-                spotName:'',
-                destination:'',
-                description:'',
-                pageNumber:1,
-                pageSize:5,
-                total:0
+                questionList: [],
+                spotId: null,
+                spotName: '',
+                destination: '',
+                description: '',
+                pageNumber: 1,
+                pageSize: 5,
+                total: 0
             }
         },
         created() {
-          this.getList();
+            this.getList();
         },
-        methods:{
+        methods: {
+            add() {
+                if (this.spotId == null || this.destination == '') {
+                    Message.warning("请选择目的地")
+                } else if(this.questionDescription == '') {
+                    Message.warning("请输入问题")
+                } else {
+                    addQuestions({
+                        spotId: this.spotId,
+                        userId: this.$store.getters.getUser.id,
+                        destination: this.destination,
+                        description: this.questionDescription
+                    }).then(res => {
+                        Message.success({
+                            message: "提问成功"
+                        });
+                        this.destination = '';
+                        this.questionDescription = '';
+                        this.questionVisible = false
+                    })
+                }
+            },
             handleCurrentChange(val) {
                 this.pageNumber = val;
                 this.getList();
@@ -133,9 +177,9 @@
                 this.spotId = item.id;
                 this.spotName = item.value;
             },
-            addQuestion(){
+            addQuestion() {
                 if (this.$store.getters.getUser.token != "" && this.$store.getters.getUser.token != null) {
-
+                    this.questionVisible = true;
                 } else {
                     Message.warning({
                         message: "请您先登录，再进行操作",
@@ -146,28 +190,37 @@
     }
 </script>
 <style scoped>
+    .info-description {
+        padding-top: 10px;
+    }
+
     .time {
         padding-top: 20px;
         text-align: right;
     }
+
     .question {
         padding-top: 15px;
         font-size: 20px;
         color: #666;
     }
+
     .answer {
         padding-top: 30px;
         font-size: 20px;
         color: #666;
     }
+
     .head-name {
         padding-top: 10px;
         text-align: center;
     }
+
     .head {
         padding-top: 30px;
         text-align: center;
     }
+
     .page {
         padding: 20px 0;
         text-align: right;

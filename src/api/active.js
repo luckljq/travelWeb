@@ -1,5 +1,14 @@
 import request from '../utils/request';
 
+//新增问题
+export const addQuestions = (query) => {
+    return request({
+        url: '/active/user/question',
+        method:'post',
+        data: query
+    })
+};
+
 //获取问答列表
 export const listQuestion = (query) => {
     return request({
