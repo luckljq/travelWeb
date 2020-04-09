@@ -51,6 +51,11 @@ export default new Router({
                     meta: { title: '问答' }
                 },
                 {
+                    path: '/questionDetails',
+                    component: resolve => require(['../components/page/QuestionDetail.vue'], resolve),
+                    meta: { title: '问答详情' }
+                },
+                {
                     path: '/search',
                     component: resolve => require(['../components/page/Search.vue'], resolve),
                     meta: { title: '搜索' }

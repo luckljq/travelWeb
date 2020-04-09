@@ -1,5 +1,14 @@
 import request from '../utils/request';
 
+//获取问答列表
+export const listQuestion = (query) => {
+    return request({
+        url:'/active/questions/web',
+        method: 'get',
+        params: query
+    })
+};
+
 //新增游记评论
 export const addDiaryComment = (query) => {
     return request({
