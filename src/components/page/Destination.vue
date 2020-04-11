@@ -17,7 +17,7 @@
                         <el-col :span="12">
                             <el-row>
                                 <el-col :span="5" class="center-title"><a>直辖市</a></el-col>
-                                <el-col :span="3"><a href="https://www.baidu.com" target="_blank">北京</a></el-col>
+                                <el-col :span="3"><a :href="spotUrl + '14'" target="_blank">北京</a></el-col>
                                 <el-col :span="3"><a href="http://localhost:8088/search" target="_blank">上海</a></el-col>
                                 <el-col :span="3"><a>重庆</a></el-col>
                                 <el-col :span="3"><a>天京</a></el-col>
@@ -93,6 +93,7 @@
         name: 'destination',
         data() {
             return {
+                spotUrl:"http://" + location.hostname + ":" + location.port + "/spot?s=",
                 name:'',
             }
         },

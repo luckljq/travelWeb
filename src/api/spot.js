@@ -1,5 +1,13 @@
 import request from '../utils/request';
 
+//获取点赞排行榜
+export const getLikeRankList = () => {
+    return request({
+        url:'/spot/spotLikeRank',
+        method: 'get'
+    })
+};
+
 export const getNames = (query) => {
     return request({
         url: '/spot/spotName',

@@ -491,7 +491,7 @@
                 }
             },
             handleSelect(key, keyPath) {
-                console.log(key, keyPath);
+                // console.log(key, keyPath);
             },
             getMessageCount() {
                 getCount(this.$store.getters.getUser.id).then(res => {
