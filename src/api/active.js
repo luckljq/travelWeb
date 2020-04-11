@@ -1,5 +1,47 @@
 import request from '../utils/request';
 
+//新增回答
+export const addAnswer = (query) => {
+    return request({
+        url: '/active/user/answer',
+        method:'post',
+        data: query
+    })
+};
+
+//新增回答回复
+export const addAnswerReply = (query) => {
+    return request({
+        url: '/active/answer/user/reply',
+        method:'post',
+        data:query
+    })
+};
+
+//获取更多回复
+export const getAnswerReply = (id) => {
+    return request({
+        url: '/active/answer/reply/' + id,
+        method: 'get'
+    })
+};
+
+//获取答案列表
+export const getAnswerList = (query) => {
+    return request({
+        url : '/active/question/answers',
+        method:'get',
+        params: query
+    })
+};
+
+//获取问答详情
+export const getQuestionDetail = (id) => {
+    return request({
+        url: '/active/question/' + id,
+        method:'get',
+    })
+};
 //新增问题
 export const addQuestions = (query) => {
     return request({

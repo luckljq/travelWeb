@@ -77,6 +77,8 @@
                 :visible.sync="questionVisible"
                 width="35%"
         >
+            <el-input v-model="title" style="width: 200px; padding-right: 20px"
+                      placeholder="请在这里输入标题"></el-input>
             <el-autocomplete
                     v-model="destination"
                     :fetch-suggestions="querySearchAsync"
@@ -107,6 +109,7 @@
         name: 'questions',
         data() {
             return {
+                title:'',
                 questionDescription: '',
                 questionVisible: false,
                 questionUrl: "http://" + location.hostname + ":" + location.port + "/questionDetails?q=",
@@ -127,14 +130,15 @@
             add() {
                 if (this.spotId == null || this.destination == '') {
                     Message.warning("请选择目的地")
-                } else if(this.questionDescription == '') {
-                    Message.warning("请输入问题")
+                } else if(this.questionDescription == '' || this.title == '') {
+                    Message.warning("请输入问题, 或者标题")
                 } else {
                     addQuestions({
                         spotId: this.spotId,
                         userId: this.$store.getters.getUser.id,
                         destination: this.destination,
-                        description: this.questionDescription
+                        description: this.questionDescription,
+                        title: this.title
                     }).then(res => {
                         Message.success({
                             message: "提问成功"
@@ -152,7 +156,7 @@
             },
             getList() {
                 listQuestion({
-                    spotId: this.spotId,
+                    // spotId: this.spotId,
                     description: this.description,
                     pageNumber: this.pageNumber,
                     pageSize: this.pageSize,
