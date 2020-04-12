@@ -42,7 +42,7 @@
                                                         </div>
                                                         <div>
                                                             <el-link target="_blank"
-                                                                    :href="spotUrl + item.scenicSpotId"
+                                                                    :href="spotUrl + item.scenicSpotId + '&t=' + item.scenicSpotType"
                                                                     :underline="false" class="bb">
                                                                 {{item.scenicSpotName}}
                                                             </el-link>
@@ -93,7 +93,7 @@
                                                         </div>
                                                         <div>
                                                             <el-link target="_blank"
-                                                                     :href="spotUrl + item.scenicSpotId"
+                                                                     :href="spotUrl + item.scenicSpotId + '&t=' + item.scenicSpotType"
                                                                      :underline="false" class="bb">
                                                                 {{item.scenicSpotName}}
                                                             </el-link>

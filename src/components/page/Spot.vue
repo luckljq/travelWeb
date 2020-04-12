@@ -91,7 +91,7 @@
         </div>
         </div>
         <div class="center-bottom">
-            <div class="center" v-if="spotType == 1">
+            <div class="center" v-if="spotType == 1 && foodStrategy.length > 0">
                 <el-row :gutter="150">
                     <el-col :span="12">
                         <div class="strategy">
@@ -126,7 +126,7 @@
                                 </el-card>
                             </div>
                             <div class="strategy-foot">
-                                <a v-bind="{ href: foodUrl + id  + '&f=1'}" target="_blank" style="color: #FF9D52">更多美食</a>
+                                <a v-bind="{ href: foodUrl + id  + '&f=' + foodStrategy[0].id}" target="_blank" style="color: #FF9D52">更多美食</a>
                             </div>
                         </div>
                     </el-col>
@@ -163,7 +163,7 @@
                                 </el-card>
                             </div>
                             <div class="strategy-foot">
-                                <a v-bind="{ href: hotelUrl + id  + '&h=1'}" target="_blank" style="color: #FF9D52" >更多住宿</a>
+                                <a v-bind="{ href: hotelUrl + id  + '&h=' + hotelStrategy[0].id}" target="_blank" style="color: #FF9D52" >更多住宿</a>
                             </div>
                         </div>
                     </el-col>
