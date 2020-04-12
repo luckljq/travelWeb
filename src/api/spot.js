@@ -1,5 +1,21 @@
 import request from '../utils/request';
 
+//增加点击量
+export const addClick = (id) => {
+    return request({
+        url:'/spot/click/count/' + id,
+        method: 'patch'
+    })
+};
+
+//获取点击排行榜
+export const getClickRankList = () => {
+    return request({
+        url:'/spot/spotClickRank',
+        method: 'get'
+    })
+};
+
 //获取点赞排行榜
 export const getLikeRankList = () => {
     return request({

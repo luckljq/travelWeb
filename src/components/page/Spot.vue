@@ -226,7 +226,7 @@
     import vComment from '../common/comment.vue'
     import {Message} from 'element-ui'
     import {getSpotDetail, spotUserFabulous, getSpotCount, getSpotUserStatus, getSpotComment, deleteFile, addComment
-    , getFoodList, getHotelList}
+    , getFoodList, getHotelList, addClick}
     from '../../api/spot'
     export default {
         name: 'spot',
@@ -277,6 +277,8 @@
             });
             //获取景点被点赞总数
             this.getCount();
+            //新增点击量
+            this.addClickData();
             let id = this.$store.getters.getUser.id;
             if (id != "") {
                 getSpotUserStatus({
@@ -297,6 +299,11 @@
             }
         },
         methods:{
+            addClickData() {
+                addClick(this.id).then(res => {
+                    console.log(res);
+                })
+            },
             getHotels() {
                 getHotelList({
                     id: this.id

@@ -65,8 +65,49 @@
                                     <div class="rank-title">
                                         点击总量榜
                                     </div>
-                                    <div class="rank-info">
-
+                                    <div class="rank-info" v-for="(item,i) in clickList" @mouseenter="showImage2(i)">
+                                        <div v-show="!item.flag" >
+                                            <el-tag class="strategy-tag">{{i + 1}}</el-tag>
+                                            <el-link :underline="false" class="aa">
+                                                {{item.scenicSpotName}}
+                                            </el-link>
+                                            <div style="float: right; margin-right: 20px; font-size: 17px">
+                                                <i class="el-icon-top"
+                                                   style="color:red; font-size: 18px; line-height: 28px"
+                                                ></i>
+                                                {{item.recommendTotal}}
+                                            </div>
+                                        </div>
+                                        <div v-show="item.flag">
+                                            <el-row :gutter="10">
+                                                <el-col :span="12">
+                                                    <div style="padding: 10px">
+                                                        <el-image style="height: 150px;"
+                                                                  :src=" 'http://localhost' + item.image"></el-image>
+                                                    </div>
+                                                </el-col>
+                                                <el-col :span="12">
+                                                    <div style="padding: 10px">
+                                                        <div>
+                                                            <el-tag class="strategy-tag2">{{i + 1}}</el-tag>
+                                                        </div>
+                                                        <div>
+                                                            <el-link target="_blank"
+                                                                     :href="spotUrl + item.scenicSpotId"
+                                                                     :underline="false" class="bb">
+                                                                {{item.scenicSpotName}}
+                                                            </el-link>
+                                                        </div>
+                                                        <div class="cc">
+                                                            <i class="el-icon-top"
+                                                               style="color:red; font-size: 18px; line-height: 28px"
+                                                            ></i>
+                                                            {{item.recommendTotal}}
+                                                        </div>
+                                                    </div>
+                                                </el-col>
+                                            </el-row>
+                                        </div>
                                     </div>
                                 </div>
                             </el-col>
@@ -78,7 +119,7 @@
     </div>
 </template>
 <script>
-    import {getLikeRankList} from '../../api/spot'
+    import {getLikeRankList, getClickRankList} from '../../api/spot'
     export default {
         name: 'rankingList',
         data() {
@@ -86,9 +127,16 @@
                 spotUrl: "http://" + location.hostname + ":" + location.port + "/spot?s=",
                 show:false,
                 likeList:[],
+                clickList:[],
             }
         },
         methods:{
+            getClickList() {
+                getClickRankList().then(res => {
+                    this.clickList = res.data;
+                    this.clickList[0].flag = true;
+                })
+            },
             getLikeRank() {
                 getLikeRankList().then(res => {
                     this.likeList = res.data;
@@ -101,9 +149,16 @@
                 });
                 this.likeList[i].flag = true;
             },
+            showImage2(i){
+                this.clickList.forEach( i => {
+                    i.flag = false;
+                });
+                this.clickList[i].flag = true;
+            }
         },
         created() {
             this.getLikeRank();
+            this.getClickList();
         }
     }
 </script>
