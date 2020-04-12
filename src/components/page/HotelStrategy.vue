@@ -290,7 +290,7 @@
         }
     }
 </script>
-<style>
+<style scoped>
     .foodList-info-address {
         position: absolute;
         bottom: 10px;

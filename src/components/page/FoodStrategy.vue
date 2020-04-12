@@ -241,7 +241,7 @@
         },
     }
 </script>
-<style>
+<style scoped>
     .comment {
         margin-top: 30px;
     }

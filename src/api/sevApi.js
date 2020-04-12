@@ -6,6 +6,36 @@ import request from '../utils/request';
  * @date 2020/3/9　10:34
  */
 
+export const getFoodCommentReply = (query) => {
+    return request({
+        url:'/sev/user/foodReply',
+        method:'get',
+        params:query
+    })
+};
+
+export const getHotelCommentReply = (query) => {
+    return request({
+        url:'/sev/user/hotelReply',
+        method:'get',
+        params:query
+    })
+};
+
+export const getFoodComment = (id) => {
+    return request({
+        url: '/sev/user/foodComment/' + id,
+        method: 'get'
+    })
+};
+
+export const getHotelComment = (id) => {
+    return request({
+        url: '/sev/user/hotelComment/' + id,
+        method: 'get'
+    })
+};
+
 //新增酒店评论
 export const addHotelComment = (query) => {
     return request({

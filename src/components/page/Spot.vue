@@ -91,7 +91,7 @@
         </div>
         </div>
         <div class="center-bottom">
-            <div class="center" v-if="spotType == 1 && foodStrategy.length > 0">
+            <div class="center" v-if="spotType == 1 && foodStrategy.length > 0 && hotelStrategy.length >0">
                 <el-row :gutter="150">
                     <el-col :span="12">
                         <div class="strategy">
@@ -301,7 +301,7 @@
         methods:{
             addClickData() {
                 addClick(this.id).then(res => {
-                    console.log(res);
+                    // console.log(res);
                 })
             },
             getHotels() {

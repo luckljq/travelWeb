@@ -116,22 +116,139 @@
                 </el-row>
             </div>
         </el-dialog>
+
+        <el-dialog
+                top="5vh"
+                :lock-scroll="false"
+                :visible.sync="commentVisible2"
+                width="45%">
+            <div class="center">
+                <el-row :gutter="20">
+                    <el-col :span="3">
+                        <el-avatar :size="55"
+                                   :src="'http://localhost' + commentData2.headImage"></el-avatar>
+                    </el-col>
+                    <el-col :span="21">
+                        <div class="user-title">
+                            <span>{{commentData2.userName}}</span>
+                        </div>
+                        <div class="info2">
+                            {{commentData2.description}}
+                        </div>
+                        <div class="bottom">
+                            <div class="time">
+                                <span style="line-height: 32px">{{commentData2.createTime}}</span>
+                            </div>
+                        </div>
+                        <div v-for="i in replyList2" >
+                            <div class="reply">
+                                <span style="color: #FF9D52">{{i.userName}}</span>
+                                <span>&nbsp;&nbsp;：</span>
+                                <span style="color: #FF9D52">@{{i.replyName}}</span>
+                                <span>&nbsp;&nbsp;{{i.description}}</span>
+                                <el-button type="text" style="color:#FF9D52;" size="medium" @click="showReplyInput(i)">&nbsp;&nbsp;&nbsp;&nbsp;回复
+                                </el-button>
+                                <div>{{i.createTime}}</div>
+                            </div>
+                        </div>
+                        <div class="input" v-show="inputFlag">
+                            <el-collapse-transition>
+                                <el-input
+                                        autofocus="true"
+                                        type="textarea"
+                                        :autosize="{ minRows: 2, maxRows: 4}"
+                                        placeholder="请输入内容(少于50字)"
+                                        v-model="textarea"
+                                        maxlength="50"
+                                        show-word-limit>
+                                </el-input>
+                            </el-collapse-transition>
+                            <div class="btn">
+                                <el-button type="warning" size="small" @click="commentReply2()">回复</el-button>
+                            </div>
+                        </div>
+                    </el-col>
+                </el-row>
+            </div>
+        </el-dialog>
+
+        <el-dialog
+                top="5vh"
+                :lock-scroll="false"
+                :visible.sync="commentVisible3"
+                width="45%">
+            <div class="center">
+                <el-row :gutter="20">
+                    <el-col :span="3">
+                        <el-avatar :size="55"
+                                   :src="'http://localhost' + commentData3.headImage"></el-avatar>
+                    </el-col>
+                    <el-col :span="20">
+                        <div class="user-title">
+                            <span>{{commentData3.userName}}</span>
+                        </div>
+                        <div class="info2">
+                            {{commentData3.description}}
+                        </div>
+                        <div class="bottom">
+                            <div class="time">
+                                <span style="line-height: 32px">{{commentData3.createTime}}</span>
+                            </div>
+                        </div>
+                        <div v-for="i in replyList3" >
+                            <div class="reply">
+                                <span style="color: #FF9D52">{{i.userName}}</span>
+                                <span>&nbsp;&nbsp;：</span>
+                                <span style="color: #FF9D52">@{{i.replyName}}</span>
+                                <span>&nbsp;&nbsp;{{i.description}}</span>
+                                <el-button type="text" style="color:#FF9D52;" size="medium" @click="showReplyInput(i)">&nbsp;&nbsp;&nbsp;&nbsp;回复
+                                </el-button>
+                                <div>{{i.createTime}}</div>
+                            </div>
+                        </div>
+                        <div class="input" v-show="inputFlag">
+                            <el-collapse-transition>
+                                <el-input
+                                        autofocus="true"
+                                        type="textarea"
+                                        :autosize="{ minRows: 2, maxRows: 4}"
+                                        placeholder="请输入内容(少于50字)"
+                                        v-model="textarea"
+                                        maxlength="50"
+                                        show-word-limit>
+                                </el-input>
+                            </el-collapse-transition>
+                            <div class="btn">
+                                <el-button type="warning" size="small" @click="commentReply3()">回复</el-button>
+                            </div>
+                        </div>
+                    </el-col>
+                </el-row>
+            </div>
+        </el-dialog>
     </div>
 </template>
 <script>
     import {Message} from 'element-ui'
     import {getMessages, getComment, getReply, addCommentReply} from '../../../api/spot'
+    import {getHotelComment, getFoodComment, getHotelCommentReply, getFoodCommentReply, addFoodReply, addHotelReply} from '../../../api/sevApi'
     export default {
         data() {
             return {
+                commentVisible:false,
+                commentVisible2:false,
+                commentVisible3:false,
                 replyId:null,
                 textarea: "",
                 replyList:[],
+                replyList2:[],
+                replyList3:[],
                 inputFlag:false,
                 colors: ['#99A9BF', '#F7BA2A', '#FF9900'],
                 commentData:{},
+                commentData2:{},
+                commentData3:{},
                 data:[],
-                commentVisible:false,
                 i:null,
                 // 当前页
                 pageNumber: 1,
@@ -146,6 +263,44 @@
             handleCurrentChange(val) {
                 this.pageNumber = val;
                 this.getUserMessage();
+            },
+            commentReply3() {
+                addHotelReply({
+                    commentId: this.commentData3.id,
+                    userId: this.$store.getters.getUser.id,
+                    replyId: this.replyId,
+                    description: this.textarea
+                }).then(res => {
+                    let item = this.data[this.i];
+                    getHotelCommentReply({
+                        id: item.orderId,
+                        userId: this.$store.getters.getUser.id,
+                        replyId: item.senderId
+                    }).then(res => {
+                        this.replyList3 = res.data;
+                    });
+                    this.inputFlag = false;
+                    this.textarea = "";
+                });
+            },
+            commentReply2() {
+                addFoodReply({
+                    commentId: this.commentData2.id,
+                    userId: this.$store.getters.getUser.id,
+                    replyId: this.replyId,
+                    description: this.textarea
+                }).then(res => {
+                    let item = this.data[this.i];
+                    getFoodCommentReply({
+                        id: item.orderId,
+                        userId: this.$store.getters.getUser.id,
+                        replyId: item.senderId
+                    }).then(res => {
+                        this.replyList2 = res.data;
+                    });
+                    this.inputFlag = false;
+                    this.textarea = "";
+                });
             },
             commentReply() {
                 addCommentReply({
@@ -193,13 +348,45 @@
                        this.commentData = res.data
                     });
                     getReply({
-                        id: item. orderId,
+                        id: item.orderId,
                         userId: this.$store.getters.getUser.id,
                         replyId: item.senderId
                     }).then(res => {
                         this.replyList = res.data;
                     });
                     this.commentVisible = true;
+                }
+                if (item.orderType == 2) {
+                    getFoodComment(item.orderId).then(res => {
+                        this.commentData2 = res.data
+                    });
+                    getFoodCommentReply({
+                        id: item.orderId,
+                        userId: this.$store.getters.getUser.id,
+                        replyId: item.senderId
+                    }).then(res => {
+                        this.replyList2 = res.data;
+                    });
+                    this.commentVisible2 = true;
+                }
+                if (item.orderType == 3) {
+                    getHotelComment(item.orderId).then(res => {
+                        this.commentData3 = res.data
+                    });
+                    getHotelCommentReply({
+                        id: item.orderId,
+                        userId: this.$store.getters.getUser.id,
+                        replyId: item.senderId
+                    }).then(res => {
+                        this.replyList3 = res.data;
+                    });
+                    this.commentVisible3 = true;
+                }
+                if (item.orderType == 4) {
+                    this.$router.push("/diaryDetail?d=" + item.orderId)
+                }
+                if (item.orderType == 5) {
+                    this.$router.push("/questionDetails?q=" + item.orderId)
                 }
             }
         }
@@ -225,6 +412,7 @@
         border-bottom: 1px solid #eee;
     }
     .center {
+        min-width: 800px;
         padding: 10px;
         display:table
     }

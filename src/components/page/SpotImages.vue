@@ -83,7 +83,7 @@
         }
     }
 </script>
-<style>
+<style scoped>
     .noMore{
         text-align: center;
     }

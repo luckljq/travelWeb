@@ -61,7 +61,7 @@
         }
     }
 </script>
-<style>
+<style scoped>
     .page {
         text-align: right;
     }

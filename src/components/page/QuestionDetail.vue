@@ -10,13 +10,13 @@
                     <div >
                         <div class="info-title">
                             <el-row :gutter="10">
-                                <el-col :span="3">
+                                <el-col :span="8">
                                     <div class="title-address">
                                         <i style="color:#FF9D52; font-size: 25px " class="el-icon-location-information"></i>
                                         {{questionDetail.destination}}
                                     </div>
                                 </el-col>
-                                <el-col :span="21">
+                                <el-col :span="16">
                                     <div class="title-name">
                                         {{questionDetail.title}}
                                         <el-button type="warning" size="medium" @click="showVisible" style="float: right">我要回答</el-button>

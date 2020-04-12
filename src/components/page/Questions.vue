@@ -145,6 +145,7 @@
                         });
                         this.destination = '';
                         this.questionDescription = '';
+                        this.title = '';
                         this.questionVisible = false
                     })
                 }

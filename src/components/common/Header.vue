@@ -474,12 +474,17 @@
             handleCommand(command) {
                 if (command === 'loginout') {
                     sessionStorage.clear();
-                    this.$router.push('/destination');
-                    clearTimeout(this.timeout);
-                    this.timeout2 = setTimeout(() => {
+                    let url = this.$route.path;
+                    if (url == "/info" || url == "/travels" ||
+                        url == "/userQuestions" || url == "/news" || url == "/notice"){
+                        this.$router.push('/destination');
+                        clearTimeout(this.timeout);
+                        this.timeout2 = setTimeout(() => {
+                            window.location.reload();
+                        }, 2000 );
+                    } else {
                         window.location.reload();
-                    }, 2000 );
-
+                    }
                 }
                 if (command === 'user') {
                     this.$router.push('info')
