@@ -1,5 +1,13 @@
 import request from '../utils/request';
 
+//用户获取游记
+export const getDiariesByUser = (query) => {
+    return request({
+        url:'/active/user/diaries',
+        method:'get',
+        params: query
+    })
+};
 //新增回答
 export const addAnswer = (query) => {
     return request({

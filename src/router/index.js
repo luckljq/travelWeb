@@ -110,16 +110,6 @@ export default new Router({
                             component: resolve => require(['../components/page/user/News.vue'], resolve),
                             meta: { title: '我的消息' }
                         },
-                        {
-                            path: '/comments',
-                            component: resolve => require(['../components/page/user/Comments.vue'], resolve),
-                            meta: { title: '我的评论' }
-                        },
-                        {
-                            path: '/want',
-                            component: resolve => require(['../components/page/user/Want.vue'], resolve),
-                            meta: { title: '我想去的' }
-                        },
                     ]
                 },
                 {

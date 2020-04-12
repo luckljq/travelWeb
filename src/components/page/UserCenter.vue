@@ -31,10 +31,10 @@
                             <i class="el-icon-s-order"></i>
                             <span style="font-size: 15px">系统公告</span>
                         </el-menu-item>
-                        <el-menu-item index="/want">
-                            <i class="el-icon-star-on"></i>
-                            <span style="font-size: 15px">我想去的</span>
-                        </el-menu-item>
+<!--                        <el-menu-item index="/want">-->
+<!--                            <i class="el-icon-star-on"></i>-->
+<!--                            <span style="font-size: 15px">我想去的</span>-->
+<!--                        </el-menu-item>-->
                     </el-menu>
                 </el-aside>
                 <el-main>
@@ -63,7 +63,7 @@
         }
     }
 </script>
-<style>
+<style scoped>
     .el-aside {
         color: #333;
         text-align: center;
