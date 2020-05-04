@@ -232,6 +232,7 @@
     }
 
     .title {
+        width: 100%;
         padding: 20px 0;
         border-bottom: 1px solid #ddd;
     }
